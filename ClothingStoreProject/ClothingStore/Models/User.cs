@@ -10,11 +10,15 @@ namespace ClothingStore.Models
 
     public class User
     {
+        public User()
 
+        {
+
+            reviews = new List<Review>();
+        }
 
 
         [Key]
-        [Required]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int userId { get; set; }
 
@@ -25,6 +29,7 @@ namespace ClothingStore.Models
 
         [Required]
         [MaxLength(150)]
+        [EmailAddress]
         public string email { get; set; } 
 
         [Required]
@@ -35,7 +40,7 @@ namespace ClothingStore.Models
         [MaxLength(100)]
         public string fullName { get; set; }
 
-        [MaxLength(20)]
+        [RegularExpression(@"^9[1-9]\d{6}$", ErrorMessage = "Please enter a valid Omani phone number.")]
         public string? phoneNumber { get; set; }
 
         [MaxLength(300)]
