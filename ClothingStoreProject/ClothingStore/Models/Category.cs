@@ -20,18 +20,19 @@ namespace ClothingStore.Models
 
                  // ── Optional Fields ───────
         [MaxLength(500)]
-        public string description { get; set; }         // user input — وصف التصنيف (اختياري)
+        public string? description { get; set; }         // user input — وصف التصنيف (اختياري)
 
         [MaxLength(300)]
-        public string imageUrl { get; set; }            // user input — رابط صورة التصنيف (اختياري)
+        public string? imageUrl { get; set; }            // user input — رابط صورة التصنيف (اختياري)
 
-                 // ── Self-Referencing Foreign Key ──────
+        // ── Self-Referencing Foreign Key ──────
 
-               public int? parentCategoryId { get; set; }      // from list — nullable (اختياري)
+        [ForeignKey("ParentCategory")]
+        public int? parentCategoryId { get; set; }      // from list — nullable (اختياري)
 
         // Navigation Property للـ Parent (الأب)
         // الـ ? يعني ممكن يكون null لو كانت top-level
-        [ForeignKey("parentCategoryId")]
+       
         public virtual Category ParentCategory { get; set; }   // navigation — التصنيف الأب
 
         // Navigation Property للـ Children (الأبناء)
