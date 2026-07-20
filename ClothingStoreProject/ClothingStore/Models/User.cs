@@ -10,13 +10,7 @@ namespace ClothingStore.Models
 
     public class User
     {
-        public User()
-
-        {
-
-            reviews = new List<Review>();
-        }
-
+   
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -40,7 +34,7 @@ namespace ClothingStore.Models
         [MaxLength(100)]
         public string fullName { get; set; }
 
-        [RegularExpression(@"^9[1-9]\d{6}$", ErrorMessage = "Please enter a valid Omani phone number.")]
+        [RegularExpression(@"^[79]\d{7}$", ErrorMessage = "Please enter a valid Omani phone number.")]
         public string? phoneNumber { get; set; }
 
         [MaxLength(300)]
@@ -53,7 +47,7 @@ namespace ClothingStore.Models
 
 
 
-        public List<Review> reviews { get; set; }
+        public List<Review> reviews { get; set; }= new List<Review>();
 
 
 
