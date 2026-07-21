@@ -12,19 +12,19 @@ namespace ClothingStore.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int brandId { get; set; }                // system generated — الرقم يتولد تلقائي من قاعدة البيانات
 
-                  // ── Required Fields ─────
-        [Required]                                      // إجباري — ما يقبل فاضي
-        [MaxLength(100)]                                // أقصى طول 100 حرف
+        // ── Required Fields ─────
+        [Required(ErrorMessage = "Brand Name Can't be Empty!!")]                         // إجباري — ما يقبل فاضي
+        [MaxLength(100, ErrorMessage = "Brand Name Can't be more than 100 Character")]  // أقصى طول 100 حرف
         public string brandName { get; set; }           // user input — اسم البراند
 
                   // ── Optional Fields ─────
-        [MaxLength(500)]                                // أقصى طول 500 حرف
+        [MaxLength(500, ErrorMessage = "description Can't be more than 500 Character")]                                // أقصى طول 500 حرف
         public string? description { get; set; }         // user input — وصف البراند (اختياري)
 
-        [MaxLength(300)]                                // أقصى طول 300 حرف
+        [MaxLength(300, ErrorMessage = "logo Url Can't be more than 100 Character")]                                // أقصى طول 300 حرف
         public string? logoUrl { get; set; }             // user input — رابط صورة اللوجو (اختياري)
 
-        [MaxLength(200)]                                // أقصى طول 200 حرف
+        [MaxLength(200, ErrorMessage = "website Url Can't be more than 100 Character")]                                // أقصى طول 200 حرف
         public string? websiteUrl { get; set; }          // user input — رابط الموقع (اختياري)
 
                  // ── Default Value ───────

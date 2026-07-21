@@ -13,16 +13,16 @@ namespace ClothingStore.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int categoryId { get; set; }             // system generated — يتولد تلقائي من قاعدة البيانات
 
-                  // ── Required Fields ─────
-        [Required]                                      // إجباري — ما يقبل فاضي
-        [MaxLength(100)]                                // أقصى 100 حرف
+        // ── Required Fields ─────
+        [Required(ErrorMessage = "category Name Can't be Empty!!")]                         // إجباري — ما يقبل فاضي
+        [MaxLength(100, ErrorMessage = "category Name Can't be more than 100 Character")]  // أقصى طول 100 حرف
         public string categoryName { get; set; }        // user input — اسم التصنيف مثل "Men's Shirts"
 
                  // ── Optional Fields ───────
-        [MaxLength(500)]
+        [MaxLength(500, ErrorMessage = "description  Can't be more than 500 Character")]
         public string? description { get; set; }         // user input — وصف التصنيف (اختياري)
 
-        [MaxLength(300)]
+        [MaxLength(300, ErrorMessage = "image Url Can't be more than 300 Character")]
         public string? imageUrl { get; set; }            // user input — رابط صورة التصنيف (اختياري)
 
         // ── Self-Referencing Foreign Key ──────
