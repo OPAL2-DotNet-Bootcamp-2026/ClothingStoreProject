@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using static ClothingStore.Enums;
 
 namespace ClothingStore.Models
 {
+    [Index(nameof(productName), IsUnique = true)]
     public class Product
     {
 
@@ -35,15 +37,15 @@ namespace ClothingStore.Models
         public virtual Category Category { get; set; } // Navigation Property
 
         [Required]
-        public Gender gender { get; set; } // User Input - System Calculated
+        public Gender gender { get; set; } // User Input (Enum)
 
         [MaxLength(100)]
         public string? material { get; set; } // User Input
 
         [Required]
-        public ClothingStyle clothingStyle { get; set; } // User Input - System Calculated
+        public ClothingStyle clothingStyle { get; set; } // User Input (Enum)
 
-        public Season? season { get; set; } // User Input - System Calculated
+        public Season? season { get; set; } // User Input (Enum)
 
         [MaxLength(300)]
         public string? careInstructions { get; set; } // User Input
@@ -55,5 +57,8 @@ namespace ClothingStore.Models
 
         // Navigation property for Reviews
         public virtual ICollection<Review> Reviews { get; set; } = new List<Review>(); // Navigation Property
+
+        // Navigation Property For ProductVariants
+        public virtual ICollection<ProductVariant> ProductVariants { get; set; } = new List<ProductVariant>();// Navigation Property
     }
 }
