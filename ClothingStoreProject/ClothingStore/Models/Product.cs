@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using static ClothingStore.Enums;
 
 namespace ClothingStore.Models
 {
+    [Index(nameof(productName), IsUnique = true)]
     public class Product
     {
 
