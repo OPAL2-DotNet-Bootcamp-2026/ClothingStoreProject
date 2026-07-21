@@ -13,46 +13,54 @@ namespace ClothingStore.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int productId { get; set; } // System Generated 
 
-        [Required]
-        [MaxLength(150)]
+        [Required(ErrorMessage = "Product name is required.")]
+        [MaxLength(150, ErrorMessage = "Product name cannot exceed 150 characters.")]
         public string productName { get; set; } // User Input
 
-        [MaxLength(1000)]
+
+        [MaxLength(1000, ErrorMessage = "Description cannot exceed 1000 characters.")]
         public string? description { get; set; } // User Input
 
-        [Required]
+
+        [Required(ErrorMessage = "Base price is required.")]
         [Range(0.01, double.MaxValue, ErrorMessage = "Base price must be greater than 0.")]
         public decimal basePrice { get; set; } // User Input
 
+
         // Foreign Key & Navigation for Brand
-        [Required]
+        [Required(ErrorMessage = "Brand is required.")]
         [ForeignKey(nameof(Brand))]
         public int BrandId { get; set; } // From Brand List
         public virtual Brand Brand { get; set; } // Navigation Property
 
+
         // Foreign Key & Navigation for Category
-        [Required]
+        [Required(ErrorMessage = "Category is required.")]
         [ForeignKey(nameof(Category))]
         public int CategoryId { get; set; } // From Category List
         public virtual Category Category { get; set; } // Navigation Property
 
-        [Required]
+
+        [Required(ErrorMessage = "Gender is required.")]
         public Gender gender { get; set; } // User Input (Enum)
 
-        [MaxLength(100)]
+        [MaxLength(100, ErrorMessage = "Material cannot exceed 100 characters.")]
         public string? material { get; set; } // User Input
 
-        [Required]
+
+        [Required(ErrorMessage = "Clothing style is required.")]
         public ClothingStyle clothingStyle { get; set; } // User Input (Enum)
+
 
         public Season? season { get; set; } // User Input (Enum)
 
-        [MaxLength(300)]
+
+        [MaxLength(300, ErrorMessage = "Care instructions cannot exceed 300 characters.")]
         public string? careInstructions { get; set; } // User Input
 
-        [Required]
-        public DateTime createdAt { get; set; } // System Calculated
 
+        [Required(ErrorMessage = "Created date is required.")]
+        public DateTime createdAt { get; set; } // System Calculated
         public bool isAvailable { get; set; } = true; // Default Value
 
         // Navigation property for Reviews
