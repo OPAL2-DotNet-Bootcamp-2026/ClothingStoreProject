@@ -21,5 +21,11 @@ namespace ClothingStore.Repos
         {
             return context.products.FirstOrDefault(p => p.productId == id);
         }
+
+        public void Add(Product product)
+        {
+            context.products.Add(product);
+            context.SaveChanges();
+        }
     }
 }
