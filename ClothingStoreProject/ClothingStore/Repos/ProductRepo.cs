@@ -58,5 +58,10 @@ namespace ClothingStore.Repos
         {
             return context.products.Where(p => p.gender == gender).ToList();
         }
+
+        public List<Product> GetAvailableOnly()
+        {
+            return context.products.Where(p => p.isAvailable).ToList();
+        }
     }
 }
