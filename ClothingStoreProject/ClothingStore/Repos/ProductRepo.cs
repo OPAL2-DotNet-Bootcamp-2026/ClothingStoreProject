@@ -27,5 +27,10 @@ namespace ClothingStore.Repos
             context.products.Add(product);
             context.SaveChanges();
         }
+
+        public void Update()
+        {
+            context.SaveChanges();
+        }
     }
 }
