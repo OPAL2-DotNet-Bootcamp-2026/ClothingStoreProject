@@ -32,5 +32,11 @@ namespace ClothingStore.Repos
         {
             context.SaveChanges();
         }
+
+        public void Delete(Product product)
+        {
+            context.products.Remove(product);
+            context.SaveChanges();
+        }
     }
 }
