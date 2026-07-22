@@ -17,5 +17,9 @@ namespace ClothingStore.Repos
             return context.products.ToList();
         }
 
+        public Product GetById(int id)
+        {
+            return context.products.FirstOrDefault(p => p.productId == id);
+        }
     }
 }
