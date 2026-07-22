@@ -16,6 +16,7 @@ namespace ClothingStore.Repos
         public List<Review> GetAllReview()
         {
             return context.reviews.ToList();
+
         }
 
         public Review GetReviewById(int id)
@@ -23,17 +24,45 @@ namespace ClothingStore.Repos
             return context.reviews.FirstOrDefault(r => r.reviewId == id);
         }
 
+
         public void AddReview(Review review)
         {
             context.reviews.Add(review);
             context.SaveChanges();
         }
 
+
+        public List<Review> GetReviewsByRating(int rating)
+        {
+            return context.reviews
+                .Where(r => r.rating == rating)
+                .ToList();
+        }
+
+
+
+        public List<Review> GetReviewsByUserId(int userId)
+        {
+            return context.reviews
+                .Where(r => r.userId == userId)
+                .ToList();
+        }
+
+
+
+        public List<Review> GetReviewsByProductId(int productId)
+        {
+            return context.reviews
+                .Where(r => r.productId == productId)
+                .ToList();
+        }
+
+
         public void UpdateReview(Review review)
         {
-            context.reviews.Update(review);
             context.SaveChanges();
         }
+
 
         public void DeleteReview(int id)
         {
@@ -43,9 +72,13 @@ namespace ClothingStore.Repos
             {
                 context.reviews.Remove(review);
                 context.SaveChanges();
-
-
             }
+
+
+
+
+
+
 
 
 
