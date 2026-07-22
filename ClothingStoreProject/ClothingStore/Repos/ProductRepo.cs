@@ -11,5 +11,11 @@ namespace ClothingStore.Repos
         {
             context = _context;
         }
+
+        public List<Product> GetAll()
+        {
+            return context.products.ToList();
+        }
+
     }
 }
