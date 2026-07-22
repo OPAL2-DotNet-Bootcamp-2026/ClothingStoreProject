@@ -38,5 +38,10 @@ namespace ClothingStore.Repos
             context.products.Remove(product);
             context.SaveChanges();
         }
+
+        public Product GetByName(string name)
+        {
+            return context.products.FirstOrDefault(p => p.productName == name);
+        }
     }
 }
