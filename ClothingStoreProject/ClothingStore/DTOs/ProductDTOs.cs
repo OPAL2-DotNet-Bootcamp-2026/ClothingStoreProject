@@ -29,4 +29,19 @@ namespace ClothingStore.DTOs
         [MaxLength(300, ErrorMessage = "Image Url Can't be more the 300 Characters")]
         public string? imageUrl { get; set; }
     }
+
+    public class UpdateVariantDto
+    {
+        [MaxLength(10, ErrorMessage = "Size Can't be more the 10 Characters")]
+        public string? size { get; set; }
+
+        [MaxLength(30, ErrorMessage = "Color Can't be more the 30 Characters")]
+        public string? color { get; set; }
+
+        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0.")]
+        public decimal? price { get; set; }
+
+        [MaxLength(300, ErrorMessage = "Image Url Can't be more the 300 Characters")]
+        public string? imageUrl { get; set; }
+    }
 }
