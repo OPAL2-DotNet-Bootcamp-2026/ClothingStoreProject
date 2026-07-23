@@ -62,4 +62,13 @@ namespace ClothingStore.DTOs
         public int stockQuantity { get; set; }
         public string? imageUrl { get; set; }
     }
+
+    public class VariantSummaryDto
+    {
+        public int variantId { get; set; }
+        public string size { get; set; }
+        public string color { get; set; }
+        public decimal price { get; set; }
+        public int stockQuantity { get; set; }
+    }
 }
