@@ -61,4 +61,15 @@ namespace ClothingStore.DTOs
         [MaxLength(300, ErrorMessage = "Care Instructions Can't be more the 300 Characters")]
         public string? careInstructions { get; set; }
     }
+
+    public class ProductListItemDto
+    {
+        public int productId { get; set; }
+        public string productName { get; set; }
+        public decimal basePrice { get; set; }
+        public string BrandName { get; set; }
+        public string CategoryName { get; set; }
+        public Gender gender { get; set; }
+        public bool isAvailable { get; set; }
+    }
 }
