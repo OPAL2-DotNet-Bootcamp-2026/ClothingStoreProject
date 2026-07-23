@@ -50,4 +50,16 @@ namespace ClothingStore.DTOs
         [Required(ErrorMessage = "Quantity is Required")]
         public int quantity { get; set; }
     }
+
+    public class VariantResponseDto
+    {
+        public int variantId { get; set; }
+        public int ProductId { get; set; }
+        public string sku { get; set; }
+        public string size { get; set; }
+        public string color { get; set; }
+        public decimal price { get; set; }
+        public int stockQuantity { get; set; }
+        public string? imageUrl { get; set; }
+    }
 }
