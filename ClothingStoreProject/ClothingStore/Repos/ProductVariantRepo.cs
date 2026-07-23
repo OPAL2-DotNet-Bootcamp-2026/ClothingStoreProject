@@ -32,5 +32,11 @@ namespace ClothingStore.Repos
         {
             return context.productsVariant.FirstOrDefault(v => v.sku == sku);
         }
+
+        public void Add(ProductVariant variant)
+        {
+            context.productsVariant.Add(variant);
+            context.SaveChanges();
+        }
     }
 }
