@@ -43,5 +43,11 @@ namespace ClothingStore.Repos
         {
             context.SaveChanges();
         }
+
+        public void Delete(ProductVariant variant)
+        {
+            context.productsVariant.Remove(variant);
+            context.SaveChanges();
+        }
     }
 }
