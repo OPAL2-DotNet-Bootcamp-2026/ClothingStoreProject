@@ -35,7 +35,9 @@ namespace ClothingStore.DTOs
 
         public class RegisterUserDto
         {
-     
+
+            [Required(ErrorMessage = "Username can't be empty!!")]
+            [MaxLength(50, ErrorMessage = "Username can't be more than 50 characters!!")]
             public string userName { get; set; }
 
 
@@ -43,8 +45,6 @@ namespace ClothingStore.DTOs
             [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
             [MaxLength(150,ErrorMessage = "Email cannot exceed 150 characters.")]
             public string email { get; set; }
-
-
 
 
             [Required(ErrorMessage = "Password is required.")]
