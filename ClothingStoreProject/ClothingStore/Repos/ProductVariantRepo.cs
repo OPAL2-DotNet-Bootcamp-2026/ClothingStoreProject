@@ -15,5 +15,10 @@ namespace ClothingStore.Repos
         {
             return context.productsVariant.ToList();
         }
+
+        public ProductVariant GetById(int id)
+        {
+            return context.productsVariant.FirstOrDefault(v => v.variantId == id);
+        }
     }
 }
