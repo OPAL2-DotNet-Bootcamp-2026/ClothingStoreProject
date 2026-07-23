@@ -38,5 +38,10 @@ namespace ClothingStore.Repos
             context.productsVariant.Add(variant);
             context.SaveChanges();
         }
+
+        public void Update(ProductVariant variant)
+        {
+            context.SaveChanges();
+        }
     }
 }
