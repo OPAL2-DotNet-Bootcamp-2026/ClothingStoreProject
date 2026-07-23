@@ -1,6 +1,53 @@
-﻿namespace ClothingStore.Repos
+﻿using ClothingStore.Models;
+
+namespace ClothingStore.Repos
 {
     public class ProductVariantRepo
     {
+        private ClothingStoreContext context;
+
+        public ProductVariantRepo(ClothingStoreContext _context)
+        {
+            context = _context;
+        }
+
+        public List<ProductVariant> GetAll()
+        {
+            return context.productsVariant.ToList();
+        }
+
+        public ProductVariant GetById(int id)
+        {
+            return context.productsVariant.FirstOrDefault(v => v.variantId == id);
+        }
+
+        public List<ProductVariant> GetByProduct(int productId)
+        {
+            return context.productsVariant
+                .Where(v => v.ProductId == productId)
+                .ToList();
+        }
+
+        public ProductVariant GetBySku(string sku)
+        {
+            return context.productsVariant.FirstOrDefault(v => v.sku == sku);
+        }
+
+        public void Add(ProductVariant variant)
+        {
+            context.productsVariant.Add(variant);
+            context.SaveChanges();
+        }
+
+        public void Update(ProductVariant variant)
+        {
+            context.SaveChanges();
+        }
+
+        public void Delete(ProductVariant variant)
+        {
+            context.productsVariant.Remove(variant);
+            context.SaveChanges();
+        }
     }
 }
