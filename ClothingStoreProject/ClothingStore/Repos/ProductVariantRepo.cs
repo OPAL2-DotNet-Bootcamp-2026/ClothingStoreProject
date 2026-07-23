@@ -27,5 +27,10 @@ namespace ClothingStore.Repos
                 .Where(v => v.ProductId == productId)
                 .ToList();
         }
+
+        public ProductVariant GetBySku(string sku)
+        {
+            return context.productsVariant.FirstOrDefault(v => v.sku == sku);
+        }
     }
 }
