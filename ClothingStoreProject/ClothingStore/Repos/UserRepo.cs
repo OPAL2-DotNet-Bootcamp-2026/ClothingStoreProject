@@ -54,7 +54,6 @@ namespace ClothingStore.Repos
         // Update User
         public void UpdateUser(User user)
         {
-            context.users.Update(user);
             context.SaveChanges();
         }
 
