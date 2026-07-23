@@ -72,4 +72,27 @@ namespace ClothingStore.DTOs
         public Gender gender { get; set; }
         public bool isAvailable { get; set; }
     }
+
+    public class ProductDetailDto
+    {
+        public int productId { get; set; }
+        public string productName { get; set; }
+        public string? description { get; set; }
+        public decimal basePrice { get; set; }
+        public int BrandId { get; set; }
+        public string BrandName { get; set; }
+        public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public Gender gender { get; set; }
+        public string? material { get; set; }
+        public ClothingStyle clothingStyle { get; set; }
+        public Season? season { get; set; }
+        public string? careInstructions { get; set; }
+        public DateTime createdAt { get; set; }
+        public bool isAvailable { get; set; }
+
+        public List<VariantSummaryDto> Variants { get; set; } = new();
+        public double AverageRating { get; set; }
+        public int ReviewCount { get; set; }
+    }
 }
