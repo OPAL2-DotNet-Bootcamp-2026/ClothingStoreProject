@@ -20,5 +20,12 @@ namespace ClothingStore.Repos
         {
             return context.productsVariant.FirstOrDefault(v => v.variantId == id);
         }
+
+        public List<ProductVariant> GetByProduct(int productId)
+        {
+            return context.productsVariant
+                .Where(v => v.ProductId == productId)
+                .ToList();
+        }
     }
 }
