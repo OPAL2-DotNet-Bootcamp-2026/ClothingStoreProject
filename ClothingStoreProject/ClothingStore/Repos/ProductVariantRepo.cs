@@ -1,4 +1,6 @@
-﻿namespace ClothingStore.Repos
+﻿using ClothingStore.Models;
+
+namespace ClothingStore.Repos
 {
     public class ProductVariantRepo
     {
@@ -7,6 +9,11 @@
         public ProductVariantRepo(ClothingStoreContext _context)
         {
             context = _context;
+        }
+
+        public List<ProductVariant> GetAll()
+        {
+            return context.productsVariant.ToList();
         }
     }
 }
