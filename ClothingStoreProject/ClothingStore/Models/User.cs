@@ -51,6 +51,10 @@ namespace ClothingStore.Models
         public bool isActive { get; set; } = true; // default value
 
 
+        [Required (ErrorMessage = "Role is required.")]
+        [MaxLength(20,ErrorMessage = "Role cannot exceed 20 characters.")]
+        public string role { get; set; } = "customer"; //from list by defualt = customer
+
 
         public List<Review> reviews { get; set; }= new List<Review>();//reverse navigation — one user has many Reviews
 
