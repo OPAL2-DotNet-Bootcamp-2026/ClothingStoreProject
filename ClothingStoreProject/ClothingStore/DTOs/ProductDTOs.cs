@@ -44,4 +44,10 @@ namespace ClothingStore.DTOs
         [MaxLength(300, ErrorMessage = "Image Url Can't be more the 300 Characters")]
         public string? imageUrl { get; set; }
     }
+
+    public class AdjustStockDto
+    {
+        [Required(ErrorMessage = "Quantity is Required")]
+        public int quantity { get; set; }
+    }
 }
