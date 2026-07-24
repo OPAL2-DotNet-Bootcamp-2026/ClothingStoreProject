@@ -7,26 +7,23 @@ namespace ClothingStore.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int cartItemId { get; set; }
+        public int cartItemId { get; set; } // System Generated
 
-        [Required]
-        [ForeignKey("Cart")]
-        public int cartId { get; set; }
+        [Required(ErrorMessage = "Cart ID is required.")]
+        [ForeignKey(nameof(Cart))]
+        public int cartId { get; set; } // From Cart List
+        public virtual Cart Cart { get; set; } // Navigation Property
 
-        [Required]
-        [ForeignKey("ProductVariant")]
-        public int variantId { get; set; }
+        [Required(ErrorMessage = "Variant ID is required.")]
+        [ForeignKey(nameof(ProductVariant))]
+        public int variantId { get; set; } // From ProductVariant List
+        public virtual ProductVariant ProductVariant { get; set; } // Navigation Property
 
-        [Required]
-        [Range(1, 999)]
-        public int quantity { get; set; }
+        [Required(ErrorMessage = "Quantity is required.")]
+        [Range(1, 999, ErrorMessage = "Quantity must be between 1 and 999.")]
+        public int quantity { get; set; } // User Input
 
-        [Required]
-        public DateTime addedAt { get; set; } = DateTime.UtcNow;
-
-        public virtual Cart Cart { get; set; }
-        
-        // Uncomment once the ProductVariant model is set up in your context
-        // public virtual ProductVariant ProductVariant { get; set; }
+        [Required(ErrorMessage = "Added date is required.")]
+        public DateTime addedAt { get; set; } = DateTime.UtcNow; // System Calculated
     }
 }
