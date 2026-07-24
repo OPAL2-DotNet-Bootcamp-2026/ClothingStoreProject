@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
+using static ClothingStore.Enums;
 
 namespace ClothingStore.Models
 {
@@ -23,7 +24,7 @@ namespace ClothingStore.Models
 
         [Required(ErrorMessage = "Size is required.")]
         [MaxLength(10, ErrorMessage = "Size cannot exceed 10 characters.")]
-        public Size size { get; set; } // User Input (Enum)
+        public _Size size { get; set; } // User Input (Enum)
 
         [Required(ErrorMessage = "Color is required.")]
         [MaxLength(30, ErrorMessage = "Color cannot exceed 30 characters.")]

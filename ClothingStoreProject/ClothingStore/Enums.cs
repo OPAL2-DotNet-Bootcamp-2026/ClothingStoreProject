@@ -27,7 +27,7 @@
             AllSeason
         }
 
-        public enum Size
+        public enum _Size
         {
             XS,
             S,
