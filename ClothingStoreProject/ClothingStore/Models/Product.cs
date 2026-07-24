@@ -21,6 +21,7 @@ namespace ClothingStore.Models
         public string? description { get; set; } // User Input
 
         [Required(ErrorMessage = "Base price is Required")]
+        [Column(TypeName = "decimal(18,2)")]
         [Range(0.01, double.MaxValue, ErrorMessage = "Base price must be greater than 0.")]
         public decimal basePrice { get; set; } // User Input
 

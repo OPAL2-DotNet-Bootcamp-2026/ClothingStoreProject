@@ -31,6 +31,7 @@ namespace ClothingStore.Models
         public string color { get; set; } // User Input
 
         [Required(ErrorMessage = "Price is required.")]
+        [Column(TypeName = "decimal(18,2)")]
         [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0.")]
         public decimal price { get; set; } // User Input
 
