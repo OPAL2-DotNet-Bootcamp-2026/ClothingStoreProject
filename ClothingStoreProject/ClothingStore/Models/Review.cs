@@ -26,13 +26,13 @@ namespace ClothingStore.Models
         [ForeignKey("user")]//foreign  key to user 
         [Required(ErrorMessage = "User ID is required.")]
         public int userId { get; set; }//from the list — from logged-in user
-        public User user { get; set; }// navigation property ,(user & review)
+        public virtual User user { get; set; }// navigation property ,(user & review)
 
 
 
         [ForeignKey("product")]//foreign  key to product
         [Required(ErrorMessage = "Product ID is required.")]
-        public int productId { get; set; }//from the list  — chosen from purchased products
-        public Product product { get; set; }//navigation property ,(product & review)
+        public virtual int productId { get; set; }//from the list  — chosen from purchased products
+        public virtual Product product { get; set; }//navigation property ,(product & review)
     }
 }

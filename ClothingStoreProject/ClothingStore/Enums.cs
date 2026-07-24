@@ -27,7 +27,7 @@
             AllSeason
         }
 
-        public enum Size
+        public enum _Size
         {
             XS,
             S,
@@ -36,6 +36,18 @@
             XL,
             XXL,
             XXXL
+        }
+
+        public enum OrderStatus
+        {
+            Pending,
+            Dispatched,     
+            OutForDelivery, 
+            Delivered,      
+            DeliveryFailed, 
+            Cancelled,      
+            Returned
+
         }
     }
 }

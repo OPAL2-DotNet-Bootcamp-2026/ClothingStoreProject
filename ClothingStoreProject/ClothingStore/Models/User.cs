@@ -56,7 +56,7 @@ namespace ClothingStore.Models
         public string role { get; set; } = "customer"; //from list by defualt = customer
 
 
-        public List<Review> reviews { get; set; }= new List<Review>();//reverse navigation — one user has many Reviews
+        public virtual List<Review> reviews { get; set; }= new List<Review>();//reverse navigation — one user has many Reviews
 
 
 
