@@ -26,7 +26,7 @@ namespace ClothingStore.Models
 
         [Required(ErrorMessage = "Status is required.")]
         [MaxLength(30, ErrorMessage = "Status cannot exceed 30 characters.")]
-        public string status { get; set; } = "Pending"; // System Calculated / User Input
+        public OrderStatus status { get; set; } = OrderStatus.Pending; // System Calculated / User Input
 
         [Required(ErrorMessage = "Shipping address is required.")]
         [MaxLength(300, ErrorMessage = "Shipping address cannot exceed 300 characters.")]

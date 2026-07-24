@@ -37,5 +37,17 @@
             XXL,
             XXXL
         }
+
+        public enum OrderStatus
+        {
+            Pending,
+            Dispatched,     
+            OutForDelivery, 
+            Delivered,      
+            DeliveryFailed, 
+            Cancelled,      
+            Returned
+
+        }
     }
 }
