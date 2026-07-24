@@ -14,17 +14,17 @@ namespace ClothingStore.Repos
 
         public List<Product> GetAll()
         {
-            return context.products.ToList();
+            return context.Products.ToList();
         }
 
         public Product GetById(int id)
         {
-            return context.products.FirstOrDefault(p => p.productId == id);
+            return context.Products.FirstOrDefault(p => p.productId == id);
         }
 
         public void Add(Product product)
         {
-            context.products.Add(product);
+            context.Products.Add(product);
             context.SaveChanges();
         }
 
@@ -35,33 +35,33 @@ namespace ClothingStore.Repos
 
         public void Delete(Product product)
         {
-            context.products.Remove(product);
+            context.Products.Remove(product);
             context.SaveChanges();
         }
 
         public Product GetByName(string name)
         {
-            return context.products.FirstOrDefault(p => p.productName == name);
+            return context.Products.FirstOrDefault(p => p.productName == name);
         }
 
         public List<Product> GetByBrandId(int brandId)
         {
-            return context.products.Where(p => p.BrandId == brandId).ToList();
+            return context.Products.Where(p => p.BrandId == brandId).ToList();
         }
 
         public List<Product> GetByCategoryId(int categoryId)
         {
-            return context.products.Where(p => p.CategoryId == categoryId).ToList();
+            return context.Products.Where(p => p.CategoryId == categoryId).ToList();
         }
 
         public List<Product> GetByGender(Gender gender)
         {
-            return context.products.Where(p => p.gender == gender).ToList();
+            return context.Products.Where(p => p.gender == gender).ToList();
         }
 
         public List<Product> GetAvailableOnly()
         {
-            return context.products.Where(p => p.isAvailable).ToList();
+            return context.Products.Where(p => p.isAvailable).ToList();
         }
     }
 }

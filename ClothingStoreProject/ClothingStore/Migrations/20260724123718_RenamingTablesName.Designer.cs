@@ -4,6 +4,7 @@ using ClothingStore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClothingStore.Migrations
 {
     [DbContext(typeof(ClothingStoreContext))]
-    partial class ClothingStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20260724123718_RenamingTablesName")]
+    partial class RenamingTablesName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,7 +58,7 @@ namespace ClothingStore.Migrations
                     b.HasIndex("brandName")
                         .IsUnique();
 
-                    b.ToTable("Brands", (string)null);
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("ClothingStore.Models.Cart", b =>
@@ -79,7 +82,7 @@ namespace ClothingStore.Migrations
 
                     b.HasIndex("userId");
 
-                    b.ToTable("Carts", (string)null);
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("ClothingStore.Models.CartItem", b =>
@@ -108,7 +111,7 @@ namespace ClothingStore.Migrations
 
                     b.HasIndex("variantId");
 
-                    b.ToTable("CartItems", (string)null);
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("ClothingStore.Models.Category", b =>
@@ -142,7 +145,7 @@ namespace ClothingStore.Migrations
 
                     b.HasIndex("parentCategoryId");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("ClothingStore.Models.Order", b =>
@@ -175,7 +178,7 @@ namespace ClothingStore.Migrations
 
                     b.HasIndex("userId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("ClothingStore.Models.OrderItem", b =>
@@ -204,7 +207,7 @@ namespace ClothingStore.Migrations
 
                     b.HasIndex("variantId");
 
-                    b.ToTable("OrderItems", (string)null);
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("ClothingStore.Models.Product", b =>
@@ -265,7 +268,7 @@ namespace ClothingStore.Migrations
                     b.HasIndex("productName")
                         .IsUnique();
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("ClothingStore.Models.ProductVariant", b =>
@@ -307,7 +310,7 @@ namespace ClothingStore.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductsVariant", (string)null);
+                    b.ToTable("ProductsVariant");
                 });
 
             modelBuilder.Entity("ClothingStore.Models.Review", b =>
@@ -340,7 +343,7 @@ namespace ClothingStore.Migrations
 
                     b.HasIndex("userId");
 
-                    b.ToTable("Reviews", (string)null);
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("ClothingStore.Models.User", b =>
@@ -394,7 +397,7 @@ namespace ClothingStore.Migrations
                     b.HasIndex("userName", "email")
                         .IsUnique();
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("ClothingStore.Models.Cart", b =>

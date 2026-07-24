@@ -13,29 +13,29 @@ namespace ClothingStore.Repos
 
         public List<ProductVariant> GetAll()
         {
-            return context.productsVariant.ToList();
+            return context.ProductsVariant.ToList();
         }
 
         public ProductVariant GetById(int id)
         {
-            return context.productsVariant.FirstOrDefault(v => v.variantId == id);
+            return context.ProductsVariant.FirstOrDefault(v => v.variantId == id);
         }
 
         public List<ProductVariant> GetByProduct(int productId)
         {
-            return context.productsVariant
+            return context.ProductsVariant
                 .Where(v => v.ProductId == productId)
                 .ToList();
         }
 
         public ProductVariant GetBySku(string sku)
         {
-            return context.productsVariant.FirstOrDefault(v => v.sku == sku);
+            return context.ProductsVariant.FirstOrDefault(v => v.sku == sku);
         }
 
         public void Add(ProductVariant variant)
         {
-            context.productsVariant.Add(variant);
+            context.ProductsVariant.Add(variant);
             context.SaveChanges();
         }
 
@@ -46,7 +46,7 @@ namespace ClothingStore.Repos
 
         public void Delete(ProductVariant variant)
         {
-            context.productsVariant.Remove(variant);
+            context.ProductsVariant.Remove(variant);
             context.SaveChanges();
         }
     }

@@ -17,7 +17,7 @@ namespace ClothingStore.Repos
         // Add User
         public void RegisterUser(User user)
         {
-            context.users.Add(user);
+            context.Users.Add(user);
             context.SaveChanges();
         }
 
@@ -25,28 +25,28 @@ namespace ClothingStore.Repos
         // Get All Users
         public List<User> GetAllUsers()
         {
-            return context.users.ToList();
+            return context.Users.ToList();
         }
 
 
         // Get User By Id
         public User GetUserById(int id)
         {
-            return context.users.FirstOrDefault(u => u.userId == id);
+            return context.Users.FirstOrDefault(u => u.userId == id);
         }
 
 
         // Get User By Username
         public User GetUserByUsername(string username)
         {
-            return context.users.FirstOrDefault(u => u.userName == username);
+            return context.Users.FirstOrDefault(u => u.userName == username);
         }
 
 
         // Get User By Email
         public User GetUserByEmail(string email)
         {
-            return context.users.FirstOrDefault(u => u.email == email);
+            return context.Users.FirstOrDefault(u => u.email == email);
         }
 
 
@@ -61,7 +61,7 @@ namespace ClothingStore.Repos
         // Delete User
         public void DeleteUser(User user)
         {
-            context.users.Remove(user);
+            context.Users.Remove(user);
             context.SaveChanges();
         }
 
