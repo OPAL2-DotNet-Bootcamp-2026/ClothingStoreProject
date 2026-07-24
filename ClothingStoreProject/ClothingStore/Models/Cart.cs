@@ -1,25 +1,27 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+using static ClothingStore.Enums;
+
 namespace ClothingStore.Models
-    
 {
     public class Cart
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int cartId { get; set; }
+        public int cartId { get; set; } // System Generated
 
-        [Required]
-        public int userId { get; set; }
+        [Required(ErrorMessage = "User ID is required.")]
+        [ForeignKey(nameof(User))]
+        public int userId { get; set; } // From User List / System
+        public virtual User User { get; set; } // Navigation Property
 
-        // Keeping one active cart per user as per specs
-        public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
+        [Required(ErrorMessage = "Creation date is required.")]
+        public DateTime createdAt { get; set; } = DateTime.UtcNow; // System Calculated
 
-        [Required]
-        public DateTime createdAt { get; set; } = DateTime.UtcNow;
+        [Required(ErrorMessage = "Update date is required.")]
+        public DateTime updatedAt { get; set; } = DateTime.UtcNow; // System Calculated
 
-        [Required]
-        public DateTime updatedAt { get; set; } = DateTime.UtcNow;
+        // Navigation property for Cart Items
+        public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>(); // Navigation Property
     }
 }
