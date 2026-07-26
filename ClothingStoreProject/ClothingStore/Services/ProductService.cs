@@ -28,9 +28,8 @@ namespace ClothingStore.Services
                 productId = product.productId,
                 productName = product.productName,
                 basePrice = product.basePrice,
-                BrandName = product.Brand?.brandName ?? "Unknown",
-                CategoryName =
-                    product.Category?.categoryName ?? "Unknown",
+                BrandName = product.Brand.brandName,
+                CategoryName = product.Category.categoryName,
                 gender = product.gender,
                 isAvailable = product.isAvailable
             };
