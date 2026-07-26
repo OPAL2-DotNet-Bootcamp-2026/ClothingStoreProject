@@ -125,6 +125,22 @@ namespace ClothingStore.Services
             return MapToDetailDto(product);
         }
 
+        public bool DeactivateProduct(int id)
+        {
+            Product? product = productRepo.GetById(id);
+
+            if (product == null)
+            {
+                return false;
+            }
+
+            product.isAvailable = false;
+
+            productRepo.Update();
+
+            return true;
+        }
+
         private ProductListItemDto MapToListDto(Product product)
         {
             return new ProductListItemDto
