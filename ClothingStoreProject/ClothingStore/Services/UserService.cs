@@ -2,6 +2,7 @@
 using ClothingStore.Models;
 using ClothingStore.Repos;
 
+
 namespace ClothingStore.Services
 {
     public class UserService
@@ -16,7 +17,7 @@ namespace ClothingStore.Services
 
 
         // Get All Users
-        public List<UserDTOs> GetAllUsers()
+        public List<UserResponseDto> GetAllUsers()
         {
             return repo.GetAllUsers()
 
