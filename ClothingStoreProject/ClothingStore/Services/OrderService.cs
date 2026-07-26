@@ -15,5 +15,15 @@ namespace ClothingStore.Services
         private CartItemRepo cartItemRepo;
         private ProductVariantRepo variantRepo;
         
+        public OrderService(OrderRepo _orderRepo, OrderItemRepo _orderItemRepo, CartRepo _cartRepo,
+            CartItemRepo _cartItemRepo, ProductVariantRepo _variantRepo) //constructer 
+        {
+            orderRepo = _orderRepo;
+            orderItemRepo = _orderItemRepo;
+            cartRepo = _cartRepo;
+            cartItemRepo = _cartItemRepo;
+            variantRepo = _variantRepo;
+        }
+        
     }
 }
