@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using static ClothingStore.Enums;
+using static System.Enum;
 
 namespace ClothingStore.DTOs
 {
@@ -66,9 +68,10 @@ namespace ClothingStore.DTOs
     public class VariantSummaryDto
     {
         public int variantId { get; set; }
-        public string size { get; set; }
+        public _Size size { get; set; }
         public string color { get; set; }
         public decimal price { get; set; }
         public int stockQuantity { get; set; }
+        public string imageUrl { get; set; }
     }
 }
