@@ -1,6 +1,7 @@
 ﻿using ClothingStore.DTOs;
 using ClothingStore.Models;
 using ClothingStore.Repos;
+using static ClothingStore.Enums;
 
 namespace ClothingStore.Services
 {
@@ -51,6 +52,15 @@ namespace ClothingStore.Services
         public List<ProductListItemDto> GetProductsByCategory(int categoryId)
         {
             List<Product> products = productRepo.GetByCategory(categoryId);
+
+            return products
+                .Select(product => MapToListDto(product))
+                .ToList();
+        }
+
+        public List<ProductListItemDto> GetProductsByGender(Gender gender)
+        {
+            List<Product> products = productRepo.GetByGender(gender);
 
             return products
                 .Select(product => MapToListDto(product))
