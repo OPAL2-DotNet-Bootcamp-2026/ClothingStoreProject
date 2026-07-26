@@ -72,5 +72,11 @@ namespace ClothingStore.Repos
         {
             return context.Products.Where(p => p.isAvailable).ToList();
         }
+
+        public bool NameExists(string name)
+        {
+            return context.Products
+                .Any(p => p.productName == name);
+        }
     }
 }
