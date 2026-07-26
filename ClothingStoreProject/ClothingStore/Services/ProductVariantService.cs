@@ -16,6 +16,16 @@ namespace ClothingStore.Services
             productVariantRepo = _productVariantRepo;
             productRepo = _productRepo;
         }
+
+        public List<VariantResponseDto> GetAllVariants()
+        {
+            List<ProductVariant> variants = productVariantRepo.GetAll();
+            return variants
+                .Select(variant => MapToResponseDto(variant))
+                .ToList();
+        }
+
+
         public VariantSummaryDto MapToSummaryDto(ProductVariant variant)
         {
             return new VariantSummaryDto
