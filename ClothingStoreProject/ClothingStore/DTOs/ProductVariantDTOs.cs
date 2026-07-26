@@ -13,7 +13,6 @@ namespace ClothingStore.DTOs
         public string sku { get; set; }
 
         [Required(ErrorMessage = "Size is Required")]
-        [MaxLength(10, ErrorMessage = "Size Can't be more the 10 Characters")]
         public _Size size { get; set; }
 
         [Required(ErrorMessage = "Color is Required")]
@@ -33,7 +32,6 @@ namespace ClothingStore.DTOs
 
     public class UpdateVariantDto
     {
-        [MaxLength(10, ErrorMessage = "Size Can't be more the 10 Characters")]
         public _Size? size { get; set; }
 
         [MaxLength(30, ErrorMessage = "Color Can't be more the 30 Characters")]
