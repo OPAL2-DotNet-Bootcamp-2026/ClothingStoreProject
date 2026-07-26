@@ -35,6 +35,39 @@ namespace ClothingStore.Services
             return MapToDto(cart);
         }
 
+        public CartResponseDto AddItem(int userId, AddCartItemDto dto)
+        {
+            var variant = variantRepo.GetById(dto.VariantId);
+            if (variant == null)
+                return null; 
+
+            if (variant.stockQuantity < dto.Quantity)
+                return null; 
+
+            var cart = GetOrCreateCart(userId);
+
+            var existing = cartItemRepo.GetByCartAndVariant(cart.cartId, dto.VariantId);
+            if (existing != null)
+            {
+                existing.quantity += dto.Quantity;
+                cartItemRepo.Update();
+            }
+            else
+            {
+                var item = new CartItem
+                {
+                    cartId = cart.cartId,
+                    variantId = dto.VariantId,
+                    quantity = dto.Quantity
+                };
+                cartItemRepo.Add(item);
+            }
+
+            cart.updatedAt = DateTime.UtcNow;
+            cartRepo.Update();
+
+            return GetByUserId(userId);
+        }
 
 
 
