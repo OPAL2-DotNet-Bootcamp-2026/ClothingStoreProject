@@ -132,7 +132,7 @@ namespace ClothingStore.Services
             return new VariantSummaryDto
             {
                 variantId = variant.variantId,
-                size = variant.size.ToString(),
+                size = variant.size,
                 color = variant.color,
                 price = variant.price,
                 stockQuantity = variant.stockQuantity
