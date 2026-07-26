@@ -51,6 +51,28 @@ namespace ClothingStore.Repos
 
 
 
+        // Get Users By Role
+        public List<User> GetByRole(string role)
+        {
+            return context.Users
+                          .Where(u => u.role == role)
+                          .ToList();
+        }
+
+
+        // Check Email Exists
+        public bool EmailExists(string email)
+        {
+            return context.Users.Any(u => u.email == email);
+        }
+
+        // Check Username Exists
+        public bool UsernameExists(string username)
+        {
+            return context.Users.Any(u => u.userName == username);
+        }
+
+
         // Update User
         public void UpdateUser(User user)
         {
@@ -64,6 +86,12 @@ namespace ClothingStore.Repos
             context.Users.Remove(user);
             context.SaveChanges();
         }
+
+
+
+
+
+
 
 
 
