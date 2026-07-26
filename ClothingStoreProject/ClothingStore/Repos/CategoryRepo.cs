@@ -1,4 +1,5 @@
 ﻿using ClothingStore.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClothingStore.Repos
 {
@@ -37,16 +38,20 @@ namespace ClothingStore.Repos
             context.SaveChanges();
         }
 
+        public  List<Category> GetSubcategories(int parentId)
+        {
+            return  context.Categories.Where(c => c.parentCategoryId == parentId).ToList();
+        }
+
+        public List<Category> GetTopLevelCategories()
+        {
+            return context.Categories.Where(c => c.parentCategoryId == null).ToList();
+        }
+
         public void Update()
         {
             context.SaveChanges();
         }
 
-        public void Delete(Category category)
-        {
-            context.Categories.Remove(category);
-            context.SaveChanges();
-
-        }
     }
 }
