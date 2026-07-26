@@ -15,7 +15,7 @@ namespace ClothingStore.Repos
 
 
         // Add User
-        public void RegisterUser(User user)
+        public void AddUser(User user)
         {
             context.users.Add(user);
             context.SaveChanges();
