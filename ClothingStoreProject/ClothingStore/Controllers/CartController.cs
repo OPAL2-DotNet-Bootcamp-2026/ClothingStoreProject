@@ -26,5 +26,14 @@ namespace ClothingStore.Controllers
             return Ok(cart);
         }
         
+        [HttpPost("AddItem")]
+        public IActionResult AddItem([FromQuery] int userId, [FromBody] AddCartItemDto dto)
+        {
+            var cart = service.AddItem(userId, dto);
+            if (cart == null)
+                return BadRequest("Variant does not exist or requested quantity exceeds available stock.");
+
+            return Ok(cart);
+        }
     }
 }
