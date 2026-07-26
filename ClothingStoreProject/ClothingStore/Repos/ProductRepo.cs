@@ -1,4 +1,5 @@
 ﻿using ClothingStore.Models;
+using Microsoft.EntityFrameworkCore;
 using static ClothingStore.Enums;
 
 namespace ClothingStore.Repos
@@ -14,12 +15,20 @@ namespace ClothingStore.Repos
 
         public List<Product> GetAll()
         {
-            return context.Products.ToList();
+            return context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .ToList();
         }
 
-        public Product GetById(int id)
+        public Product? GetById(int id)
         {
-            return context.Products.FirstOrDefault(p => p.productId == id);
+            return context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .Include(p => p.ProductVariants)
+                .Include(p => p.Reviews)
+                .FirstOrDefault(p => p.productId == id);
         }
 
         public void Add(Product product)
@@ -39,29 +48,56 @@ namespace ClothingStore.Repos
             context.SaveChanges();
         }
 
-        public Product GetByName(string name)
+        public List<Product> SearchByName(string name)
         {
-            return context.Products.FirstOrDefault(p => p.productName == name);
+            return context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .Where(p => p.productName.Contains(name))
+                .ToList();
         }
 
-        public List<Product> GetByBrandId(int brandId)
+        public List<Product> GetByBrand(int brandId)
         {
-            return context.Products.Where(p => p.BrandId == brandId).ToList();
+            return context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .Where(p => p.BrandId == brandId)
+                .ToList();
         }
 
-        public List<Product> GetByCategoryId(int categoryId)
+        public List<Product> GetByCategory(int categoryId)
         {
-            return context.Products.Where(p => p.CategoryId == categoryId).ToList();
+            return context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .Where(p => p.CategoryId == categoryId)
+                .ToList();
+
         }
 
         public List<Product> GetByGender(Gender gender)
         {
-            return context.Products.Where(p => p.gender == gender).ToList();
+            return context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .Where(p => p.gender == gender)
+                .ToList();
         }
 
-        public List<Product> GetAvailableOnly()
+        public List<Product> GetAvailable()
         {
-            return context.Products.Where(p => p.isAvailable).ToList();
+            return context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .Where(p => p.isAvailable)
+                .ToList();
+        }
+
+        public bool NameExists(string name)
+        {
+            return context.Products
+                .Any(p => p.productName == name);
         }
     }
 }
