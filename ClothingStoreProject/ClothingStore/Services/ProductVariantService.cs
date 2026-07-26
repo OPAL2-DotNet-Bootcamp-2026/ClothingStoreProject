@@ -122,7 +122,7 @@ namespace ClothingStore.Services
                 variant.imageUrl = dto.imageUrl;
             }
 
-            productVariantRepo.Update(variant);
+            productVariantRepo.Update();
 
             return MapToResponseDto(variant);
         }
@@ -145,7 +145,7 @@ namespace ClothingStore.Services
 
             variant.stockQuantity = updatedStock;
 
-            productVariantRepo.Update(variant);
+            productVariantRepo.Update();
 
             return MapToResponseDto(variant);
         }
