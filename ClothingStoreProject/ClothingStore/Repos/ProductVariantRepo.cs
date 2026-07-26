@@ -29,6 +29,7 @@ namespace ClothingStore.Repos
         public List<ProductVariant> GetByProduct(int productId)
         {
             return context.ProductsVariant
+                .Include(v => v.Product)
                 .Where(v => v.ProductId == productId)
                 .ToList();
         }
