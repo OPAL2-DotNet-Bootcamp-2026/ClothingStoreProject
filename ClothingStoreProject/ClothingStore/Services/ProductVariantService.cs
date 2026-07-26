@@ -146,7 +146,7 @@ namespace ClothingStore.Services
                 variantId = variant.variantId,
                 ProductId = variant.ProductId,
                 sku = variant.sku,
-                size = variant.size.ToString(),
+                size = variant.size,
                 color = variant.color,
                 price = variant.price,
                 stockQuantity = variant.stockQuantity,
