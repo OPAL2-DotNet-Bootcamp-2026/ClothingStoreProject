@@ -24,7 +24,7 @@ namespace ClothingStore.DTOs
 
             public DateTime registrationDate { get; set; }
 
-            public bool isActive { get; set; }
+            public bool IsActive { get; set; }
 
             public string role { get; set; }
         }
@@ -88,22 +88,10 @@ namespace ClothingStore.DTOs
 
         public class UpdateUserDto
         {
-           
-            [Required(ErrorMessage = "Username is required.")]
-            [MaxLength(50, ErrorMessage = "Username cannot exceed 50 characters.")]
-            public string userName { get; set; }
+         
 
-
-            [Required(ErrorMessage = "Email is required.")]
-            [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
-            [MaxLength(150, ErrorMessage = "Email cannot exceed 150 characters.")]
-            public string email { get; set; }
-
-
-
-            [Required(ErrorMessage = "Full name can't be empty!!")]
             [MaxLength(100, ErrorMessage = "Full name can't be more than 100 characters!!")]
-            public string fullName { get; set; }
+            public string? fullName { get; set; }
 
 
             [RegularExpression(@"^[79]\d{7}$", ErrorMessage = "Please enter a valid Omani phone number.")]
@@ -123,11 +111,13 @@ namespace ClothingStore.DTOs
 
         public class ChangePasswordDto
         {
-            [Required(ErrorMessage = "Current password is requied")]
+            [Required(ErrorMessage = "Current password is required")]
+            [MaxLength(100, ErrorMessage = "Password can't be more than 100 characters.")]
             public string currentPassword { get; set; }
 
 
             [Required(ErrorMessage = "New password is required.")]
+            [MaxLength(100, ErrorMessage = "Password can't be more than 100 characters.")]
             [RegularExpression(
              @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$",
             ErrorMessage = "Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 8 characters long.")]
@@ -136,6 +126,7 @@ namespace ClothingStore.DTOs
 
 
             [Required(ErrorMessage = "Please confirm your new password.")]
+            [MaxLength(100, ErrorMessage = "Password can't be more than 100 characters.")]
             [Compare("NewPassword", ErrorMessage = "Passwords do not match.")]
             public string confirmPassword { get; set; }
         }
