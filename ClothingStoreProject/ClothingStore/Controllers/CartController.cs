@@ -45,5 +45,14 @@ namespace ClothingStore.Controllers
 
             return Ok(cart);
         }
+        [HttpDelete("RemoveItem/{cartItemId}")]
+        public IActionResult RemoveItem([FromQuery] int userId, [FromRoute] int cartItemId)
+        {
+            var removed = service.RemoveItem(userId, cartItemId);
+            if (!removed)
+                return NotFound("Cart item not found or not owned by this user.");
+
+            return NoContent();
+        }
     }
 }
