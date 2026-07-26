@@ -35,5 +35,45 @@ namespace ClothingStore.Services
                 isAvailable = product.isAvailable
             };
         }
+
+        private ProductDetailDto MapToDetailDto(Product product)
+        {
+            return new ProductDetailDto
+            {
+                productId = product.productId,
+                productName = product.productName,
+                description = product.description,
+                basePrice = product.basePrice,
+                BrandId = product.BrandId,
+                BrandName = product.Brand?.brandName ?? "Unknown",
+                CategoryId = product.CategoryId,
+                CategoryName = product.Category?.categoryName ?? "Unknown",
+                gender = product.gender,
+                material = product.material,
+                clothingStyle = product.clothingStyle,
+                season = product.season,
+                careInstructions = product.careInstructions,
+                createdAt = product.createdAt,
+                isAvailable = product.isAvailable,
+
+                Variants = product.ProductVariants
+                    .Select(v => new VariantSummaryDto
+                    {
+                        variantId = v.variantId,
+                        size = v.size,
+                        color = v.color,
+                        price = v.price,
+                        stockQuantity = v.stockQuantity,
+                        imageUrl = v.imageUrl
+                    })
+                    .ToList(),
+
+                AverageRating = product.Reviews.Any()
+                    ? product.Reviews.Average(r => r.rating)
+                    : 0,
+
+                ReviewCount = product.Reviews.Count
+            };
+        }
     }
 }
