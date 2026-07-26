@@ -27,6 +27,18 @@ namespace ClothingStore.Services
                 .ToList();
         }
 
+        public ProductDetailDto? GetProductById(int id)
+        {
+            Product? product = productRepo.GetById(id);
+
+            if (product == null)
+            {
+                return null;
+            }
+
+            return MapToDetailDto(product);
+        }
+
         private ProductListItemDto MapToListDto(Product product)
         {
             return new ProductListItemDto
