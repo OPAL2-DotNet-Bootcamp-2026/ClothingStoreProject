@@ -127,6 +127,29 @@ namespace ClothingStore.Services
             return MapToResponseDto(variant);
         }
 
+        public VariantResponseDto? AdjustStock(int id,AdjustStockDto dto)
+        {
+            ProductVariant? variant = productVariantRepo.GetById(id);
+
+            if (variant == null)
+            {
+                return null;
+            }
+
+            int updatedStock = variant.stockQuantity + dto.quantity;
+
+            if (updatedStock < 0)
+            {
+                return null;
+            }
+
+            variant.stockQuantity = updatedStock;
+
+            productVariantRepo.Update(variant);
+
+            return MapToResponseDto(variant);
+        }
+
         public VariantSummaryDto MapToSummaryDto(ProductVariant variant)
         {
             return new VariantSummaryDto
