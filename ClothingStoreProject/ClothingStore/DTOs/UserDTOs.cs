@@ -89,21 +89,10 @@ namespace ClothingStore.DTOs
         public class UpdateUserDto
         {
            
-            [Required(ErrorMessage = "Username is required.")]
-            [MaxLength(50, ErrorMessage = "Username cannot exceed 50 characters.")]
-            public string userName { get; set; }
-
-
-            [Required(ErrorMessage = "Email is required.")]
-            [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
-            [MaxLength(150, ErrorMessage = "Email cannot exceed 150 characters.")]
-            public string email { get; set; }
-
-
-
+ 
             [Required(ErrorMessage = "Full name can't be empty!!")]
             [MaxLength(100, ErrorMessage = "Full name can't be more than 100 characters!!")]
-            public string fullName { get; set; }
+            public string? fullName { get; set; }
 
 
             [RegularExpression(@"^[79]\d{7}$", ErrorMessage = "Please enter a valid Omani phone number.")]
