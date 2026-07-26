@@ -27,5 +27,20 @@ namespace ClothingStore.Services
                 stockQuantity = variant.stockQuantity
             };
         }
+
+        private VariantResponseDto MapToResponseDto(ProductVariant variant)
+        {
+            return new VariantResponseDto
+            {
+                variantId = variant.variantId,
+                ProductId = variant.ProductId,
+                sku = variant.sku,
+                size = variant.size.ToString(),
+                color = variant.color,
+                price = variant.price,
+                stockQuantity = variant.stockQuantity,
+                imageUrl = variant.imageUrl
+            };
+        }
     }
 }
