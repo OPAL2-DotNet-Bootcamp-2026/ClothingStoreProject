@@ -47,6 +47,18 @@ namespace ClothingStore.Services
                 .ToList();
         }
 
+        public VariantResponseDto? GetVariantBySku(string sku)
+        {
+            ProductVariant? variant = productVariantRepo.GetBySku(sku);
+
+            if (variant == null)
+            {
+                return null;
+            }
+
+            return MapToResponseDto(variant);
+        }
+
         public VariantSummaryDto MapToSummaryDto(ProductVariant variant)
         {
             return new VariantSummaryDto
