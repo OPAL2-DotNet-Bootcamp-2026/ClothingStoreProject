@@ -20,6 +20,12 @@ namespace ClothingStore.Services
             this.categoryRepo = categoryRepo;
         }
 
+        public List<ProductListItemDto> GetAllProducts()
+        {
+            return productRepo.GetAll()
+                .Select(MapToListDto)
+                .ToList();
+        }
 
         private ProductListItemDto MapToListDto(Product product)
         {
