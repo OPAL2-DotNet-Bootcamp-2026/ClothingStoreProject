@@ -85,6 +85,54 @@ namespace ClothingStore.Services
                 .ToList();
         }
 
+        public ProductDetailDto? AddProduct(CreateProductDto dto)
+        {
+            Brand? brand = brandRepo.GetById(dto.BrandId);
+
+            if (brand == null)
+            {
+                return null;
+            }
+
+            Category? category = categoryRepo.GetById(dto.CategoryId);
+
+            if (category == null)
+            {
+                return null;
+            }
+
+            if (productRepo.NameExists(dto.productName))
+            {
+                return null;
+            }
+
+            Product product = new Product
+            {
+                productName = dto.productName,
+                description = dto.description,
+                basePrice = dto.basePrice,
+
+                BrandId = dto.BrandId,
+                Brand = brand,
+
+                CategoryId = dto.CategoryId,
+                Category = category,
+
+                gender = dto.gender,
+                material = dto.material,
+                clothingStyle = dto.clothingStyle,
+                season = dto.season,
+                careInstructions = dto.careInstructions,
+
+                createdAt = DateTime.UtcNow,
+                isAvailable = true
+            };
+
+            productRepo.Add(product);
+
+            return MapToDetailDto(product);
+        }
+
         public ProductDetailDto? UpdateProduct(int id, UpdateProductDto dto)
         {
             Product? product = productRepo.GetById(id);
