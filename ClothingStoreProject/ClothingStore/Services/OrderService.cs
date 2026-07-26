@@ -89,6 +89,16 @@ namespace ClothingStore.Services
             return GetById(order.orderId);
         }
 
+        public bool UpdateStatus(int id, UpdateOrderStatusDto dto)
+        {
+            var order = orderRepo.GetById(id);
+            if (order == null)
+                return false;
+
+            order.status = dto.Status;
+            orderRepo.Update();
+            return true;
+        }
         
     }
 }
