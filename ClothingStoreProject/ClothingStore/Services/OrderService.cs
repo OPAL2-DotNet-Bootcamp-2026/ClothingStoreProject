@@ -100,5 +100,16 @@ namespace ClothingStore.Services
             return true;
         }
         
+        private OrderListItemDto MapToListItemDto(Order order)
+        {
+            return new OrderListItemDto
+            {
+                OrderId = order.orderId,
+                UserId = order.userId,
+                OrderDate = order.orderDate,
+                TotalAmount = order.totalAmount,
+                Status = order.status
+            };
+        }
     }
 }
