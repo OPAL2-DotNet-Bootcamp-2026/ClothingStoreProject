@@ -1,4 +1,6 @@
-﻿using ClothingStore.Repos;
+﻿using ClothingStore.DTOs;
+using ClothingStore.Models;
+using ClothingStore.Repos;
 
 namespace ClothingStore.Services
 {
@@ -13,6 +15,17 @@ namespace ClothingStore.Services
         {
             productVariantRepo = _productVariantRepo;
             productRepo = _productRepo;
+        }
+        public VariantSummaryDto MapToSummaryDto(ProductVariant variant)
+        {
+            return new VariantSummaryDto
+            {
+                variantId = variant.variantId,
+                size = variant.size.ToString(),
+                color = variant.color,
+                price = variant.price,
+                stockQuantity = variant.stockQuantity
+            };
         }
     }
 }
