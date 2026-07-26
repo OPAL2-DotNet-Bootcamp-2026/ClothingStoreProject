@@ -69,6 +69,21 @@ namespace ClothingStore.Services
             return GetByUserId(userId);
         }
 
+        public CartResponseDto UpdateItemQuantity(int userId, int cartItemId, UpdateCartItemDto dto)
+        {
+            var item = cartItemRepo.GetById(cartItemId);
+            if (item == null || item.Cart.userId != userId)
+                return null; 
+
+            var variant = variantRepo.GetById(item.variantId);
+            if (variant != null && variant.stockQuantity < dto.Quantity)
+                return null; 
+
+            item.quantity = dto.Quantity;
+            cartItemRepo.Update();
+
+            return GetByUserId(userId);
+        }
 
 
 
