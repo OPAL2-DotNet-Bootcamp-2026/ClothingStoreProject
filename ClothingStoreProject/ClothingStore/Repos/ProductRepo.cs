@@ -1,4 +1,5 @@
 ﻿using ClothingStore.Models;
+using Microsoft.EntityFrameworkCore;
 using static ClothingStore.Enums;
 
 namespace ClothingStore.Repos
@@ -14,7 +15,10 @@ namespace ClothingStore.Repos
 
         public List<Product> GetAll()
         {
-            return context.Products.ToList();
+            return context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .ToList();
         }
 
         public Product GetById(int id)
