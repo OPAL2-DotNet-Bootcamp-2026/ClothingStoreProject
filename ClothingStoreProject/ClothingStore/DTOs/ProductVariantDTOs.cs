@@ -69,5 +69,6 @@ namespace ClothingStore.DTOs
         public string color { get; set; }
         public decimal price { get; set; }
         public int stockQuantity { get; set; }
+        public string imageUrl { get; set; }
     }
 }
