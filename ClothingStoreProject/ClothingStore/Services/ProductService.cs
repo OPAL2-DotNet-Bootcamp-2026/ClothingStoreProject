@@ -48,6 +48,15 @@ namespace ClothingStore.Services
                 .ToList();
         }
 
+        public List<ProductListItemDto> GetProductsByCategory(int categoryId)
+        {
+            List<Product> products = productRepo.GetByCategory(categoryId);
+
+            return products
+                .Select(product => MapToListDto(product))
+                .ToList();
+        }
+
         public ProductDetailDto? UpdateProduct(int id, UpdateProductDto dto)
         {
             Product? product = productRepo.GetById(id);
