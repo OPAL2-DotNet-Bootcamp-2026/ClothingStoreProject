@@ -38,6 +38,15 @@ namespace ClothingStore.Services
             return MapToResponseDto(variant);
         }
 
+        public List<VariantResponseDto> GetVariantsByProduct(int productId)
+        {
+            List<ProductVariant> variants = productVariantRepo.GetByProduct(productId);
+
+            return variants
+                .Select(variant => MapToResponseDto(variant))
+                .ToList();
+        }
+
         public VariantSummaryDto MapToSummaryDto(ProductVariant variant)
         {
             return new VariantSummaryDto
