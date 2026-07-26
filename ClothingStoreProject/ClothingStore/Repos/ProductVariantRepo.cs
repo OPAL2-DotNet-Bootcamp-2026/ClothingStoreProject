@@ -1,4 +1,5 @@
 ﻿using ClothingStore.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClothingStore.Repos
 {
@@ -13,24 +14,31 @@ namespace ClothingStore.Repos
 
         public List<ProductVariant> GetAll()
         {
-            return context.ProductsVariant.ToList();
+            return context.ProductsVariant
+                .Include(v => v.Product)
+                .ToList();
         }
 
         public ProductVariant GetById(int id)
         {
-            return context.ProductsVariant.FirstOrDefault(v => v.variantId == id);
+            return context.ProductsVariant
+                .Include(v => v.Product)
+                .FirstOrDefault(v => v.variantId == id);
         }
 
         public List<ProductVariant> GetByProduct(int productId)
         {
             return context.ProductsVariant
+                .Include(v => v.Product)
                 .Where(v => v.ProductId == productId)
                 .ToList();
         }
 
         public ProductVariant GetBySku(string sku)
         {
-            return context.ProductsVariant.FirstOrDefault(v => v.sku == sku);
+            return context.ProductsVariant
+                .Include(v => v.Product)
+                .FirstOrDefault(v => v.sku == sku);
         }
 
         public void Add(ProductVariant variant)

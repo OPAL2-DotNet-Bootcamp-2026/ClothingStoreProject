@@ -23,7 +23,6 @@ namespace ClothingStore.Models
         public string sku { get; set; } // User Input 
 
         [Required(ErrorMessage = "Size is required.")]
-        [MaxLength(10, ErrorMessage = "Size cannot exceed 10 characters.")]
         public _Size size { get; set; } // User Input (Enum)
 
         [Required(ErrorMessage = "Color is required.")]

@@ -25,7 +25,6 @@ namespace ClothingStore.Models
         public decimal totalAmount { get; set; } // System Calculated / User Input
 
         [Required(ErrorMessage = "Status is required.")]
-        [MaxLength(30, ErrorMessage = "Status cannot exceed 30 characters.")]
         public OrderStatus status { get; set; } = OrderStatus.Pending; // System Calculated / User Input
 
         [Required(ErrorMessage = "Shipping address is required.")]
