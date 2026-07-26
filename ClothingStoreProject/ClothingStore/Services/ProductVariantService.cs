@@ -150,6 +150,21 @@ namespace ClothingStore.Services
             return MapToResponseDto(variant);
         }
 
+        public bool DeleteVariant(int id)
+        {
+            ProductVariant? variant =
+                productVariantRepo.GetById(id);
+
+            if (variant == null)
+            {
+                return false;
+            }
+
+            productVariantRepo.Delete(variant);
+
+            return true;
+        }
+
         public VariantSummaryDto MapToSummaryDto(ProductVariant variant)
         {
             return new VariantSummaryDto
