@@ -18,6 +18,16 @@ namespace ClothingStore.Services
         }
 
     
+        public Cart GetOrCreateCart(int userId)
+        {
+            var cart = cartRepo.GetByUserId(userId);
+            if (cart == null)
+            {
+                cart = new Cart { userId = userId };
+                cart = cartRepo.Add(cart);
+            }
+            return cart;
+        }
 
 
 
