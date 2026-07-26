@@ -76,6 +76,15 @@ namespace ClothingStore.Services
                 .ToList();
         }
 
+        public List<ProductListItemDto> GetAvailableProducts()
+        {
+            List<Product> products = productRepo.GetAvailable();
+
+            return products
+                .Select(product => MapToListDto(product))
+                .ToList();
+        }
+
         public ProductDetailDto? UpdateProduct(int id, UpdateProductDto dto)
         {
             Product? product = productRepo.GetById(id);
