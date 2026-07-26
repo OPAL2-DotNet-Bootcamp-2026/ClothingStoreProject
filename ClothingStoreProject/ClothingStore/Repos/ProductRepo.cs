@@ -62,9 +62,14 @@ namespace ClothingStore.Repos
                 .ToList();
         }
 
-        public List<Product> GetByCategoryId(int categoryId)
+        public List<Product> GetByCategory(int categoryId)
         {
-            return context.Products.Where(p => p.CategoryId == categoryId).ToList();
+            return context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .Where(p => p.CategoryId == categoryId)
+                .ToList();
+
         }
 
         public List<Product> GetByGender(Gender gender)
