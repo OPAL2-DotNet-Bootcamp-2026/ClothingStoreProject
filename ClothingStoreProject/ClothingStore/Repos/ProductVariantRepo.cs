@@ -21,7 +21,9 @@ namespace ClothingStore.Repos
 
         public ProductVariant GetById(int id)
         {
-            return context.ProductsVariant.FirstOrDefault(v => v.variantId == id);
+            return context.ProductsVariant
+                .Include(v => v.Product)
+                .FirstOrDefault(v => v.variantId == id);
         }
 
         public List<ProductVariant> GetByProduct(int productId)
