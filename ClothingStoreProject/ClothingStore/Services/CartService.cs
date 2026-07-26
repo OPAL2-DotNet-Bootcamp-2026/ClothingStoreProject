@@ -85,6 +85,15 @@ namespace ClothingStore.Services
             return GetByUserId(userId);
         }
 
+        public bool RemoveItem(int userId, int cartItemId)
+        {
+            var item = cartItemRepo.GetById(cartItemId);
+            if (item == null || item.Cart.userId != userId)
+                return false;
+
+            cartItemRepo.Delete(item);
+            return true;
+        }
 
 
     }
