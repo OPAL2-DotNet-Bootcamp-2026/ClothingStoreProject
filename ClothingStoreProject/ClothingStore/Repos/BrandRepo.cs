@@ -42,11 +42,5 @@ namespace ClothingStore.Repos
             context.SaveChanges();
         }
 
-        public void Delete(Brand brand)
-        {
-            context.Brands.Remove(brand);
-            context.SaveChanges();
-
-        }
     }
 }
