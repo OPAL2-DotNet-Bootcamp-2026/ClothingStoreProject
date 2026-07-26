@@ -143,6 +143,15 @@ namespace ClothingStore.DTOs
 
 
 
+        //setactiveStatusDto
+
+        public class SetActiveStatusDto
+        {
+            public bool Isactive { get; set; }
+        }
+
+
+
 
 
 
