@@ -24,6 +24,11 @@ namespace ClothingStore.Services
             cartItemRepo = _cartItemRepo;
             variantRepo = _variantRepo;
         }
-        
+        public List<OrderListItemDto> GetAll()
+        {
+            return orderRepo.GetAll().Select(MapToListItemDto).ToList();
+        }
+
+ 
     }
 }
