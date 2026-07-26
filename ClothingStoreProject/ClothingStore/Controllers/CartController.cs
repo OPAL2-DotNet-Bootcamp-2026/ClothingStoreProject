@@ -14,18 +14,18 @@ namespace ClothingStore.Controllers
         {
             service = _service;
         }
-        
+
         // TODO: replace [FromQuery] int userId with User.FindFirst("userId") once
         // JWT auth middleware is wired into Program.cs. Left as a query param for now
         // so the endpoint is testable in Swagger before auth exists.
-        
+
         [HttpGet("{userId}")]
         public IActionResult GetCart([FromRoute] int userId)
         {
             var cart = service.GetByUserId(userId);
             return Ok(cart);
         }
-        
+
         [HttpPost("AddItem")]
         public IActionResult AddItem([FromQuery] int userId, [FromBody] AddCartItemDto dto)
         {
@@ -35,7 +35,7 @@ namespace ClothingStore.Controllers
 
             return Ok(cart);
         }
-      
+
         [HttpPut("UpdateItem/{cartItemId}")]
         public IActionResult UpdateItem([FromQuery] int userId, [FromRoute] int cartItemId, [FromBody] UpdateCartItemDto dto)
         {
@@ -45,12 +45,23 @@ namespace ClothingStore.Controllers
 
             return Ok(cart);
         }
+
         [HttpDelete("RemoveItem/{cartItemId}")]
         public IActionResult RemoveItem([FromQuery] int userId, [FromRoute] int cartItemId)
         {
             var removed = service.RemoveItem(userId, cartItemId);
             if (!removed)
                 return NotFound("Cart item not found or not owned by this user.");
+
+            return NoContent();
+        }
+
+        [HttpDelete("Clear")]
+        public IActionResult ClearCart([FromQuery] int userId)
+        {
+            var cleared = service.ClearCart(userId);
+            if (!cleared)
+                return NotFound("Cart not found for this user.");
 
             return NoContent();
         }
