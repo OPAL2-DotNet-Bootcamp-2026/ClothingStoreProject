@@ -85,9 +85,13 @@ namespace ClothingStore.Repos
                 .ToList();
         }
 
-        public List<Product> GetAvailableOnly()
+        public List<Product> GetAvailable()
         {
-            return context.Products.Where(p => p.isAvailable).ToList();
+            return context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .Where(p => p.isAvailable)
+                .ToList();
         }
 
         public bool NameExists(string name)
