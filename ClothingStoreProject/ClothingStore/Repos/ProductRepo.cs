@@ -74,7 +74,11 @@ namespace ClothingStore.Repos
 
         public List<Product> GetByGender(Gender gender)
         {
-            return context.Products.Where(p => p.gender == gender).ToList();
+            return context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .Where(p => p.gender == gender)
+                .ToList();
         }
 
         public List<Product> GetAvailableOnly()
