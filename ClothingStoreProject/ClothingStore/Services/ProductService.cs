@@ -39,6 +39,15 @@ namespace ClothingStore.Services
             return MapToDetailDto(product);
         }
 
+        public List<ProductListItemDto> GetProductsByBrand(int brandId)
+        {
+            List<Product> products = productRepo.GetByBrand(brandId);
+
+            return products
+                .Select(product => MapToListDto(product))
+                .ToList();
+        }
+
         public ProductDetailDto? UpdateProduct(int id, UpdateProductDto dto)
         {
             Product? product = productRepo.GetById(id);
