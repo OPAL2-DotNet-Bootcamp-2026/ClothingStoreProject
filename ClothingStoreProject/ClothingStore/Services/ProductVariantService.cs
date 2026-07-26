@@ -26,6 +26,18 @@ namespace ClothingStore.Services
         }
 
 
+        public VariantResponseDto? GetVariantById(int id)
+        {
+            ProductVariant? variant = productVariantRepo.GetById(id);
+
+            if (variant == null)
+            {
+                return null;
+            }
+
+            return MapToResponseDto(variant);
+        }
+
         public VariantSummaryDto MapToSummaryDto(ProductVariant variant)
         {
             return new VariantSummaryDto
