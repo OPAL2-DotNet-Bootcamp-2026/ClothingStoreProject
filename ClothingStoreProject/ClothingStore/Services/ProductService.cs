@@ -39,6 +39,92 @@ namespace ClothingStore.Services
             return MapToDetailDto(product);
         }
 
+        public ProductDetailDto? UpdateProduct(int id, UpdateProductDto dto)
+        {
+            Product? product = productRepo.GetById(id);
+
+            if (product == null)
+            {
+                return null;
+            }
+
+            if (!string.IsNullOrWhiteSpace(dto.productName))
+            {
+                if (dto.productName != product.productName &&
+                    productRepo.NameExists(dto.productName))
+                {
+                    return null;
+                }
+
+                product.productName = dto.productName;
+            }
+
+            if (dto.description != null)
+            {
+                product.description = dto.description;
+            }
+
+            if (dto.basePrice.HasValue)
+            {
+                product.basePrice = dto.basePrice.Value;
+            }
+
+            if (dto.BrandId.HasValue)
+            {
+                Brand? brand = brandRepo.GetById(dto.BrandId.Value);
+
+                if (brand == null)
+                {
+                    return null;
+                }
+
+                product.BrandId = dto.BrandId.Value;
+                product.Brand = brand;
+            }
+
+            if (dto.CategoryId.HasValue)
+            {
+                Category? category = categoryRepo.GetById(dto.CategoryId.Value);
+
+                if (category == null)
+                {
+                    return null;
+                }
+
+                product.CategoryId = dto.CategoryId.Value;
+                product.Category = category;
+            }
+
+            if (dto.gender.HasValue)
+            {
+                product.gender = dto.gender.Value;
+            }
+
+            if (dto.material != null)
+            {
+                product.material = dto.material;
+            }
+
+            if (dto.clothingStyle.HasValue)
+            {
+                product.clothingStyle = dto.clothingStyle.Value;
+            }
+
+            if (dto.season.HasValue)
+            {
+                product.season = dto.season.Value;
+            }
+
+            if (dto.careInstructions != null)
+            {
+                product.careInstructions = dto.careInstructions;
+            }
+
+            productRepo.Update();
+
+            return MapToDetailDto(product);
+        }
+
         private ProductListItemDto MapToListDto(Product product)
         {
             return new ProductListItemDto
