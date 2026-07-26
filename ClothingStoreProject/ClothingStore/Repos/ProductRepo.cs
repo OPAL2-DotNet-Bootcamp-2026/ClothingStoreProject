@@ -21,7 +21,7 @@ namespace ClothingStore.Repos
                 .ToList();
         }
 
-        public Product GetById(int id)
+        public Product? GetById(int id)
         {
             return context.Products
                 .Include(p => p.Brand)
@@ -48,7 +48,7 @@ namespace ClothingStore.Repos
             context.SaveChanges();
         }
 
-        public List<Product> GetByName(string name)
+        public List<Product> SearchByName(string name)
         {
             return context.Products
                 .Include(p => p.Brand)
