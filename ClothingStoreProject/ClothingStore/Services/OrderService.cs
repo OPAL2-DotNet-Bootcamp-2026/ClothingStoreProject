@@ -111,5 +111,23 @@ namespace ClothingStore.Services
                 Status = order.status
             };
         }
+        private OrderDetailDto MapToDetailDto(Order order)
+        {
+            return new OrderDetailDto
+            {
+                OrderId = order.orderId,
+                UserId = order.userId,
+                OrderDate = order.orderDate,
+                TotalAmount = order.totalAmount,
+                Status = order.status,
+                ShippingAddress = order.shippingAddress,
+                OrderItems = order.OrderItems.Select(oi => new OrderItemResponseDto
+                {
+                    OrderItemId = oi.orderItemId,
+                    VariantId = oi.variantId,
+                    Quantity = oi.quantity,
+                    UnitPrice = oi.unitPrice
+                }).ToList()
+            };
     }
 }
