@@ -235,6 +235,22 @@ namespace ClothingStore.Services
             return true;
         }
 
+        public bool ToggleAvailability(int id)
+        {
+            Product? product = productRepo.GetById(id);
+
+            if (product == null)
+            {
+                return false;
+            }
+
+            product.isAvailable = !product.isAvailable;
+
+            productRepo.Update();
+
+            return true;
+        }
+
         private ProductListItemDto MapToListDto(Product product)
         {
             return new ProductListItemDto
