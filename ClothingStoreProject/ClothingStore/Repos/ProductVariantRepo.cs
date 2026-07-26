@@ -36,7 +36,9 @@ namespace ClothingStore.Repos
 
         public ProductVariant GetBySku(string sku)
         {
-            return context.ProductsVariant.FirstOrDefault(v => v.sku == sku);
+            return context.ProductsVariant
+                .Include(v => v.Product)
+                .FirstOrDefault(v => v.sku == sku);
         }
 
         public void Add(ProductVariant variant)
