@@ -29,6 +29,11 @@ namespace ClothingStore.Services
             return orderRepo.GetAll().Select(MapToListItemDto).ToList();
         }
 
+        public List<OrderListItemDto> GetByUserId(int userId)
+        {
+            return orderRepo.GetByUserId(userId).Select(MapToListItemDto).ToList();
+        }
+
  
     }
 }
