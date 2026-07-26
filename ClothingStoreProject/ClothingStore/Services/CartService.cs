@@ -94,7 +94,16 @@ namespace ClothingStore.Services
             cartItemRepo.Delete(item);
             return true;
         }
+        public bool ClearCart(int userId)
+        {
+            var cart = cartRepo.GetByUserId(userId);
+            if (cart == null)
+                return false;
 
+            cartItemRepo.ClearCart(cart.cartId);
+            return true;
+        }
+        
 
     }
 }
