@@ -92,6 +92,41 @@ namespace ClothingStore.Services
 
             return MapToResponseDto(variant);
         }
+
+        public VariantResponseDto? UpdateVariant(int id,UpdateVariantDto dto)
+        {
+            ProductVariant? variant = productVariantRepo.GetById(id);
+
+            if (variant == null)
+            {
+                return null;
+            }
+
+            if (dto.size.HasValue)
+            {
+                variant.size = dto.size.Value;
+            }
+
+            if (!string.IsNullOrWhiteSpace(dto.color))
+            {
+                variant.color = dto.color;
+            }
+
+            if (dto.price.HasValue)
+            {
+                variant.price = dto.price.Value;
+            }
+
+            if (dto.imageUrl != null)
+            {
+                variant.imageUrl = dto.imageUrl;
+            }
+
+            productVariantRepo.Update(variant);
+
+            return MapToResponseDto(variant);
+        }
+
         public VariantSummaryDto MapToSummaryDto(ProductVariant variant)
         {
             return new VariantSummaryDto
