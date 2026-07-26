@@ -48,9 +48,13 @@ namespace ClothingStore.Repos
             context.SaveChanges();
         }
 
-        public Product GetByName(string name)
+        public List<Product> GetByName(string name)
         {
-            return context.Products.FirstOrDefault(p => p.productName == name);
+            return context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .Where(p => p.productName.Contains(name))
+                .ToList();
         }
 
         public List<Product> GetByBrand(int brandId)
