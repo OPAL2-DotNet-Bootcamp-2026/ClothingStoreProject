@@ -17,38 +17,9 @@ namespace ClothingStore.Services
         }
 
 
-        // Get All Users
-        public List<UserResponseDto> GetAllUsers()
+
+        private UserResponseDto MapToResponse(User user)
         {
-            return repo.GetAllUsers()
-
-                .Select(u => new UserResponseDto
-                {
-                    userId = u.userId,
-                    userName = u.userName,
-                    email = u.email,
-                    fullName = u.fullName,
-                    phoneNumber = u.phoneNumber,
-                    address = u.address,
-                    registrationDate = u.registrationDate,
-                    isActive = u.isActive,
-                    role = u.role
-                })
-                .ToList();
-        }
-
-
-
-        // Get User By Id
-        public UserResponseDto GetUserById(int id)
-        {
-            User user = repo.GetUserById(id);
-
-            if (user == null)
-
-                throw new Exception("User not found.");
-
-
             return new UserResponseDto
             {
                 userId = user.userId,
@@ -65,33 +36,57 @@ namespace ClothingStore.Services
 
 
 
+
+
+
+        // Get All Users
+        public List<UserResponseDto> GetAllUsers()
+        { 
+   
+                return repo.GetAllUsers()
+                           .Select(u => MapToResponse(u))
+                           .ToList();
+            }
+
+
+
+
+        // Get User By Id
+        public UserResponseDto GetUserById(int id)
+        {
+            User user = repo.GetUserById(id);
+
+            if (user == null)
+
+                throw new  KeyNotFoundException("User not found.");
+
+
+            return MapToResponse(user);
+
+
+        }
+
+
+
         // Get Users By Role
         public List<UserResponseDto> GetUsersByRole(string role)
         {
-            return repo.GetByRole(role)
-
-                .Select(u => new UserResponseDto
-                {
-                    userId = u.userId,
-                    userName = u.userName,
-                    email = u.email,
-                    fullName = u.fullName,
-                    phoneNumber = u.phoneNumber,
-                    address = u.address,
-                    registrationDate = u.registrationDate,
-                    isActive = u.isActive,
-                    role = u.role
-                })
-                .ToList();
-
-                    }
-
+         
+                return repo.GetByRole(role)
+                           .Select(u => MapToResponse(u))
+                           .ToList();
+        }
+              
 
 
         // Register User
 
         public UserResponseDto RegisterUser(RegisterUserDto dto)
+
+
         {
+            dto.email=dto.email.Trim().ToLower();
+
             // Check Email
             if (repo.EmailExists(dto.email))
                 return null;
@@ -104,70 +99,50 @@ namespace ClothingStore.Services
             {
                 userName = dto.userName,
                 email = dto.email,
-                passwordHash = dto.password,
+                passwordHash =BCrypt.Net.BCrypt.HashPassword(dto.password),
                 fullName = dto.fullName,
-                phoneNumber = dto.phoneNumber,
+                phoneNumber =dto.phoneNumber,
                 address = dto.address,
-                registrationDate = DateTime.Now,
-                isActive = true,
+                registrationDate =DateTime.Now,
+                isActive =true,
                 role = "Customer"
             };
 
             repo.RegisterUser(user);
-
-            UserResponseDto response = new UserResponseDto
-            {
-                userId = user.userId,
-                userName = user.userName,
-                email = user.email,
-                fullName = user.fullName,
-                phoneNumber = user.phoneNumber,
-                address = user.address,
-                registrationDate = user.registrationDate,
-                isActive = user.isActive,
-                role = user.role
-            };
-
-            return response;
+            return MapToResponse(user);
         }
-
-
-
 
 
         // Login
 
         public UserResponseDto LoginUser(LoginDto dto)
         {
+
+            dto.email = dto.email.Trim().ToLower();
+
+
             // Search by email
             User user = repo.GetUserByEmail(dto.email);
 
             if (user == null)
-                return null;
+                throw new KeyNotFoundException("User not found");
 
             // Check if account is active
             if (!user.isActive)
-                return null;
+
+                throw new UnauthorizedAccessException("User account is inactive");
 
             // Check password
-            if (user.passwordHash != dto.password)
-                return null;
+
+            bool validPassword = BCrypt.Net.BCrypt.Verify(dto.password, user.passwordHash);
+            if (!validPassword)
+                throw new UnauthorizedAccessException("Invalid password");
+
 
             // Create Response DTO
-            UserResponseDto response = new UserResponseDto
-            {
-                userId = user.userId,
-                userName = user.userName,
-                email = user.email,
-                fullName = user.fullName,
-                phoneNumber = user.phoneNumber,
-                address = user.address,
-                registrationDate = user.registrationDate,
-                isActive = user.isActive,
-                role = user.role
-            };
 
-            return response;
+            return MapToResponse(user);
+        
         }
 
 
@@ -183,13 +158,19 @@ namespace ClothingStore.Services
             User user = repo.GetUserById(id);
 
             if (user == null)
-                throw new Exception("User not found.");
+                throw new  KeyNotFoundException("User not found.");
 
-            user.fullName = dto.fullName;
-            user.phoneNumber = dto.phoneNumber;
-            user.address = dto.address;
+            if (dto.fullName != null)
+                user.fullName = dto.fullName;
 
-            repo. UpdateUser(user);
+            if (dto.phoneNumber != null)
+                user.phoneNumber = dto.phoneNumber;
+
+            if (dto.address != null)
+                user.address = dto.address;
+
+
+            repo.UpdateUser(user);
         }
 
 
@@ -200,12 +181,21 @@ namespace ClothingStore.Services
             User user = repo.GetUserById(id);
 
             if (user == null)
-                throw new Exception("User not found.");
+                throw new KeyNotFoundException("User not found.");
 
-            if (user.passwordHash != dto.currentPassword)
-                throw new Exception("Current password is incorrect.");
+   
+            bool validPassword = BCrypt.Net.BCrypt.Verify(dto.currentPassword, user.passwordHash);
 
-            user.passwordHash = dto.newPassword;
+            if (!validPassword)
+                throw new  UnauthorizedAccessException("Current password is incorrect.");
+
+            if (dto.currentPassword == dto.newPassword)
+                throw new InvalidOperationException(
+                    "New password must be different from the current password.");
+
+
+            user.passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.newPassword);
+
 
             repo.UpdateUser(user);
         }
@@ -216,12 +206,12 @@ namespace ClothingStore.Services
         // Activate / Deactivate User
         public void SetUserActiveStatus(int id, SetActiveStatusDto dto)
         {
-            User user = repo.GetUserById(id);
+            User user =repo.GetUserById(id);
 
             if (user == null)
-                throw new Exception("User not found.");
+                throw new KeyNotFoundException("User not found.");
 
-            user.isActive = dto.Isactive;
+            user.isActive =dto.Isactive;
 
             repo.UpdateUser(user);
 
@@ -261,4 +251,4 @@ namespace ClothingStore.Services
 
 
     }
-}
+
