@@ -35,5 +35,15 @@ namespace ClothingStore.Controllers
 
             return Ok(cart);
         }
+      
+        [HttpPut("UpdateItem/{cartItemId}")]
+        public IActionResult UpdateItem([FromQuery] int userId, [FromRoute] int cartItemId, [FromBody] UpdateCartItemDto dto)
+        {
+            var cart = service.UpdateItemQuantity(userId, cartItemId, dto);
+            if (cart == null)
+                return BadRequest("Cart item not found, not owned by this user, or requested quantity exceeds available stock.");
+
+            return Ok(cart);
+        }
     }
 }
