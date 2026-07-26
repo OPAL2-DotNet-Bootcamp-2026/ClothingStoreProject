@@ -15,26 +15,26 @@ namespace ClothingStore.Repos
 
         public List<Review> GetAllReview()
         {
-            return context.reviews.ToList();
+            return context.Reviews.ToList();
 
         }
 
         public Review GetReviewById(int id)
         {
-            return context.reviews.FirstOrDefault(r => r.reviewId == id);
+            return context.Reviews.FirstOrDefault(r => r.reviewId == id);
         }
 
 
         public void AddReview(Review review)
         {
-            context.reviews.Add(review);
+            context.Reviews.Add(review);
             context.SaveChanges();
         }
 
 
         public List<Review> GetReviewsByRating(int rating)
         {
-            return context.reviews
+            return context.Reviews
                 .Where(r => r.rating == rating)
                 .ToList();
         }
@@ -43,7 +43,7 @@ namespace ClothingStore.Repos
 
         public List<Review> GetReviewsByUserId(int userId)
         {
-            return context.reviews
+            return context.Reviews
                 .Where(r => r.userId == userId)
                 .ToList();
         }
@@ -52,7 +52,7 @@ namespace ClothingStore.Repos
 
         public List<Review> GetReviewsByProductId(int productId)
         {
-            return context.reviews
+            return context.Reviews
                 .Where(r => r.productId == productId)
                 .ToList();
         }
@@ -66,11 +66,11 @@ namespace ClothingStore.Repos
 
         public void DeleteReview(int id)
         {
-            var review = context.reviews.FirstOrDefault(r => r.reviewId == id);
+            var review = context.Reviews.FirstOrDefault(r => r.reviewId == id);
 
             if (review != null)
             {
-                context.reviews.Remove(review);
+                context.Reviews.Remove(review);
                 context.SaveChanges();
             }
 

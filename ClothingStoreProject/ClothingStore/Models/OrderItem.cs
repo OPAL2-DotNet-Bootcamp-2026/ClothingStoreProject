@@ -29,7 +29,8 @@ namespace ClothingStore.Models
 
         [Required(ErrorMessage = "Unit price is required.")]
         [Range(0.01, double.MaxValue, ErrorMessage = "Unit price must be greater than 0.")]
-       
+
+        [Column(TypeName = "decimal(18,2)")]
         public decimal unitPrice { get; set; } // Calculated
     }
 }

@@ -1,6 +1,67 @@
-﻿namespace ClothingStore.Repos
+﻿using ClothingStore.Models;
+using static ClothingStore.Enums;
+
+namespace ClothingStore.Repos
 {
     public class ProductRepo
     {
+        private ClothingStoreContext context;
+
+        public ProductRepo(ClothingStoreContext _context)
+        {
+            context = _context;
+        }
+
+        public List<Product> GetAll()
+        {
+            return context.Products.ToList();
+        }
+
+        public Product GetById(int id)
+        {
+            return context.Products.FirstOrDefault(p => p.productId == id);
+        }
+
+        public void Add(Product product)
+        {
+            context.Products.Add(product);
+            context.SaveChanges();
+        }
+
+        public void Update()
+        {
+            context.SaveChanges();
+        }
+
+        public void Delete(Product product)
+        {
+            context.Products.Remove(product);
+            context.SaveChanges();
+        }
+
+        public Product GetByName(string name)
+        {
+            return context.Products.FirstOrDefault(p => p.productName == name);
+        }
+
+        public List<Product> GetByBrandId(int brandId)
+        {
+            return context.Products.Where(p => p.BrandId == brandId).ToList();
+        }
+
+        public List<Product> GetByCategoryId(int categoryId)
+        {
+            return context.Products.Where(p => p.CategoryId == categoryId).ToList();
+        }
+
+        public List<Product> GetByGender(Gender gender)
+        {
+            return context.Products.Where(p => p.gender == gender).ToList();
+        }
+
+        public List<Product> GetAvailableOnly()
+        {
+            return context.Products.Where(p => p.isAvailable).ToList();
+        }
     }
 }
