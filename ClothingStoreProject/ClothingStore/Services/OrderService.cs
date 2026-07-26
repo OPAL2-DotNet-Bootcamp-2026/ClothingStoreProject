@@ -34,6 +34,10 @@ namespace ClothingStore.Services
             return orderRepo.GetByUserId(userId).Select(MapToListItemDto).ToList();
         }
 
- 
+        public OrderDetailDto GetById(int id)
+        {
+            var order = orderRepo.GetById(id);
+            return order == null ? null : MapToDetailDto(order);
+        }
     }
 }
