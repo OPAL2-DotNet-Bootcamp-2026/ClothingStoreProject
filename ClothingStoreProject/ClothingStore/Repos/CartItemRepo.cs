@@ -1,4 +1,5 @@
 ﻿using ClothingStore.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClothingStore.Repos
 {
@@ -13,7 +14,10 @@ namespace ClothingStore.Repos
 
         public CartItem GetById(int id)
         {
-            return context.CartItems.FirstOrDefault(ci => ci.cartItemId == id);
+            return context.CartItems
+                .Include(ci => ci.Cart)
+                .Include(ci => ci.ProductVariant)
+                .FirstOrDefault(ci => ci.cartItemId == id);
         }
 
         public CartItem GetByCartAndVariant(int cartId, int variantId)
