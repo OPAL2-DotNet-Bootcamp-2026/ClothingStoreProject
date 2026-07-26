@@ -1,6 +1,7 @@
 ﻿using ClothingStore.DTOs;
 using ClothingStore.Models;
 using ClothingStore.Repos;
+using static ClothingStore.Enums;
 
 namespace ClothingStore.Services
 {
@@ -59,6 +60,38 @@ namespace ClothingStore.Services
             return MapToResponseDto(variant);
         }
 
+        public VariantResponseDto? AddVariant(ProductVariantDTOs dto)
+        {
+            Product? product = productRepo.GetById(dto.ProductId);
+
+            if (product == null)
+            {
+                return null;
+            }
+
+            ProductVariant? existingVariant = productVariantRepo.GetBySku(dto.sku);
+
+            if (existingVariant != null)
+            {
+                return null;
+            }
+
+            ProductVariant variant = new ProductVariant
+            {
+                ProductId = dto.ProductId,
+                Product = product,
+                sku = dto.sku,
+                size = dto.size,
+                color = dto.color,
+                price = dto.price,
+                stockQuantity = dto.stockQuantity,
+                imageUrl = dto.imageUrl
+            };
+
+            productVariantRepo.Add(variant);
+
+            return MapToResponseDto(variant);
+        }
         public VariantSummaryDto MapToSummaryDto(ProductVariant variant)
         {
             return new VariantSummaryDto
