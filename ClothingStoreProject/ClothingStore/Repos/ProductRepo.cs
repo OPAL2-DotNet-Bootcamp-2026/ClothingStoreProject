@@ -23,7 +23,12 @@ namespace ClothingStore.Repos
 
         public Product GetById(int id)
         {
-            return context.Products.FirstOrDefault(p => p.productId == id);
+            return context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .Include(p => p.ProductVariants)
+                .Include(p => p.Reviews)
+                .FirstOrDefault(p => p.productId == id);
         }
 
         public void Add(Product product)
