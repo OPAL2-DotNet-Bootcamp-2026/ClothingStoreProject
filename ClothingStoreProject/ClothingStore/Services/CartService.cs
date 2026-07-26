@@ -103,7 +103,21 @@ namespace ClothingStore.Services
             cartItemRepo.ClearCart(cart.cartId);
             return true;
         }
-        
+        private CartResponseDto MapToDto(Cart cart)
+        {
+            return new CartResponseDto
+            {
+                CartId = cart.cartId,
+                UserId = cart.userId,
+                UpdatedAt = cart.updatedAt,
+                CartItems = cart.CartItems.Select(ci => new CartItemResponseDto
+                {
+                    CartItemId = ci.cartItemId,
+                    VariantId = ci.variantId,
+                    Quantity = ci.quantity,
+                    UnitPrice = ci.ProductVariant?.price ?? 0 
+                }).ToList()
+            };
 
     }
 }
