@@ -41,12 +41,14 @@ namespace ClothingStore.Services
             if (variant == null)
                 return null;
 
-            if (variant.stockQuantity < dto.Quantity)
-                return null;
-
             var cart = GetOrCreateCart(userId);
 
             var existing = cartItemRepo.GetByCartAndVariant(cart.cartId, dto.VariantId);
+            int alreadyInCart = existing?.quantity ?? 0;
+
+            if (variant.stockQuantity < alreadyInCart + dto.Quantity)
+                return null;
+
             if (existing != null)
             {
                 existing.quantity += dto.Quantity;
