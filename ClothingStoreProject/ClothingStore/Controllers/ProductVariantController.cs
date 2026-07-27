@@ -73,5 +73,23 @@ namespace ClothingStore.Controllers
 
             return Ok(variant);
         }
+
+        [HttpPost("AddVariant")]
+        public IActionResult AddVariant([FromBody] ProductVariantDTOs dto)
+        {
+            VariantResponseDto? variant = productVariantService.AddVariant(dto);
+
+            if (variant == null)
+            {
+                return BadRequest(
+                    "Variant could not be added. " +
+                    "The Product Id may be invalid or the SKU may already exist.");
+            }
+
+            return CreatedAtAction(
+                nameof(GetVariantById),
+                new { id = variant.variantId },
+                variant);
+        }
     }
 }
