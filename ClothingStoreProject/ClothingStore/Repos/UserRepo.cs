@@ -30,21 +30,21 @@ namespace ClothingStore.Repos
 
 
         // Get User By Id
-        public User GetUserById(int id)
+        public User ? GetUserById(int id)
         {
             return context.Users.FirstOrDefault(u => u.userId == id);
         }
 
 
         // Get User By Username
-        public User GetUserByUsername(string username)
+        public User? GetUserByUsername(string username)
         {
             return context.Users.FirstOrDefault(u => u.userName == username);
         }
 
 
         // Get User By Email
-        public User GetUserByEmail(string email)
+        public User? GetUserByEmail(string email)
         {
             return context.Users.FirstOrDefault(u => u.email == email);
         }
@@ -52,7 +52,7 @@ namespace ClothingStore.Repos
 
 
         // Get Users By Role
-        public List<User> GetByRole(string role)
+        public List<User> GetByRole(Enums.Role role)
         {
             return context.Users
                           .Where(u => u.role == role)
@@ -74,7 +74,7 @@ namespace ClothingStore.Repos
 
 
         // Update User
-        public void UpdateUser(User user)
+        public void UpdateUser()
         {
             context.SaveChanges();
         }
