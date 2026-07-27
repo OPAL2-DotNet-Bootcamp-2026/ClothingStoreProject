@@ -115,5 +115,33 @@ namespace ClothingStore.Controllers
                 new { id = product.productId },
                 product);
         }
+
+        [HttpPut("UpdateProduct")]
+        public IActionResult UpdateProduct([FromQuery] int id,[FromBody] UpdateProductDto dto)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Product Id must be greater than 0.");
+            }
+
+            ProductDetailDto? existingProduct = productService.GetProductById(id);
+
+            if (existingProduct == null)
+            {
+                return NotFound("Product was not found.");
+            }
+
+            ProductDetailDto? updatedProduct = productService.UpdateProduct(id, dto);
+
+            if (updatedProduct == null)
+            {
+                return BadRequest(
+                    "Product could not be updated. " +
+                    "The product name may already exist, " +
+                    "or the Brand Id or Category Id may be invalid.");
+            }
+
+            return Ok(updatedProduct);
+        }
     }
 }
