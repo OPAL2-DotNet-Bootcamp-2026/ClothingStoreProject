@@ -23,5 +23,24 @@ namespace ClothingStore.Controllers
 
             return Ok(variants);
         }
+
+        [HttpGet("GetVariantById")]
+        public IActionResult GetVariantById([FromQuery] int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Variant Id must be greater than 0.");
+            }
+
+            VariantResponseDto? variant =
+                productVariantService.GetVariantById(id);
+
+            if (variant == null)
+            {
+                return NotFound("Variant was not found.");
+            }
+
+            return Ok(variant);
+        }
     }
 }
