@@ -96,5 +96,24 @@ namespace ClothingStore.Controllers
 
             return Ok(products);
         }
+
+        [HttpPost("AddProduct")]
+        public IActionResult AddProduct([FromBody] CreateProductDto dto)
+        {
+            ProductDetailDto? product = productService.AddProduct(dto);
+
+            if (product == null)
+            {
+                return BadRequest(
+                    "Product could not be added. " +
+                    "The product name may already exist, " +
+                    "or the Brand Id or Category Id may be invalid.");
+            }
+
+            return CreatedAtAction(
+                nameof(GetProductById),
+                new { id = product.productId },
+                product);
+        }
     }
 }
