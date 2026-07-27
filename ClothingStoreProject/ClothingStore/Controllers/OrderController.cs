@@ -32,6 +32,16 @@ namespace ClothingStore.Controllers{
             return Ok(orders);
         }
         
+        [HttpGet("{id}")]
+        public IActionResult GetById([FromRoute] int id)
+        {
+            var order = service.GetById(id);
+            if (order == null)
+                return NotFound($"Order with id {id} not found.");
+
+            return Ok(order);
+        }
+        
         
         
     }
