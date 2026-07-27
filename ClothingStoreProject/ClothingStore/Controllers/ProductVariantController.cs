@@ -135,5 +135,23 @@ namespace ClothingStore.Controllers
 
             return Ok(updatedVariant);
         }
+
+        [HttpDelete("DeleteVariant")]
+        public IActionResult DeleteVariant([FromQuery] int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Variant Id must be greater than 0.");
+            }
+
+            bool isDeleted = productVariantService.DeleteVariant(id);
+
+            if (!isDeleted)
+            {
+                return NotFound("Variant was not found.");
+            }
+
+            return NoContent();
+        }
     }
 }
