@@ -40,7 +40,6 @@ namespace ClothingStore.DTOs
         public class UpdateOrderStatusDto
         {
             [Required(ErrorMessage = "Status is required.")]
-            [StringLength(30, ErrorMessage = "Status cannot exceed 30 characters.")]
             public OrderStatus Status { get; set; } // Admin Input
         }
     }
