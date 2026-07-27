@@ -25,6 +25,12 @@ namespace ClothingStore.Controllers{
             var orders = service.GetAll();
             return Ok(orders);
         }
+        [HttpGet("user/{userId}")]
+        public IActionResult GetByUser([FromRoute] int userId)
+        {
+            var orders = service.GetByUserId(userId);
+            return Ok(orders);
+        }
         
         
         
