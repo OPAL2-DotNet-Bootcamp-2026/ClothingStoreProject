@@ -1,6 +1,7 @@
-namespace DefaultNamespace;
+using MailKit.Net.Smtp;
+using MimeKit;
 
-public class EmailService
+public interface IEmailService
 {
-    
+    Task SendAsync(string toEmail, string subject, string body);
 }
