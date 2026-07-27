@@ -23,5 +23,25 @@ namespace ClothingStore.Controllers
 
             return Ok(products);
         }
+
+        [HttpGet("GetProductById")]
+        public IActionResult GetProductById([FromQuery] int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Product Id must be greater than 0.");
+            }
+
+            ProductDetailDto? product = productService.GetProductById(id);
+
+            if (product == null)
+            {
+                return NotFound("Product was not found.");
+            }
+
+            return Ok(product);
+        }
+
+
     }
 }
