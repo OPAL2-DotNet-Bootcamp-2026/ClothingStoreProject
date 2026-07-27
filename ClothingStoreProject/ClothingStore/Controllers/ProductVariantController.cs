@@ -109,5 +109,31 @@ namespace ClothingStore.Controllers
 
             return Ok(variant);
         }
+
+        [HttpPatch("AdjustStock")]
+        public IActionResult AdjustStock([FromQuery] int id,[FromBody] AdjustStockDto dto)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Variant Id must be greater than 0.");
+            }
+
+            VariantResponseDto? existingVariant = productVariantService.GetVariantById(id);
+
+            if (existingVariant == null)
+            {
+                return NotFound("Variant was not found.");
+            }
+
+            VariantResponseDto? updatedVariant = productVariantService.AdjustStock(id, dto);
+
+            if (updatedVariant == null)
+            {
+                return BadRequest(
+                    "Stock quantity cannot become negative.");
+            }
+
+            return Ok(updatedVariant);
+        }
     }
 }
