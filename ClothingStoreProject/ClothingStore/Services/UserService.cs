@@ -1,22 +1,17 @@
-﻿using ClothingStore.DTOs;
-using ClothingStore.Models;
+﻿using ClothingStore.Models;
 using ClothingStore.Repos;
 using static ClothingStore.DTOs.UserDTOs;
-
 
 namespace ClothingStore.Services
 {
     public class UserService
     {
-
         private UserRepo repo;
 
-        public UserService (UserRepo repo)
+        public UserService(UserRepo repo)
         {
             this.repo = repo;
         }
-
-
 
         private UserResponseDto MapToResponse(User user)
         {
@@ -32,223 +27,204 @@ namespace ClothingStore.Services
                 isActive = user.isActive,
                 role = user.role
             };
-        }
+                  }
 
 
-
-
-
-
-        // Get All Users
-        public List<UserResponseDto> GetAllUsers()
-        { 
-   
+                // Get All Users
+               public List<UserResponseDto> GetAllUsers()
+               {
                 return repo.GetAllUsers()
                            .Select(u => MapToResponse(u))
                            .ToList();
-            }
+                  }
 
 
 
 
-        // Get User By Id
-        public UserResponseDto GetUserById(int id)
-        {
-            User user = repo.GetUserById(id);
+                // Get User By Id
+               public UserResponseDto? GetUserById(int id)
+                 {
+                User? user = repo.GetUserById(id);
 
-            if (user == null)
+                 if (user == null)
+                 {
+                return null;
+                   }
 
-                throw new  KeyNotFoundException("User not found.");
+                return MapToResponse(user);
 
-
-            return MapToResponse(user);
-
-
-        }
-
+                 }
 
 
-        // Get Users By Role
-        public List<UserResponseDto> GetUsersByRole(string role)
-        {
-         
-                return repo.GetByRole(role)
-                           .Select(u => MapToResponse(u))
-                           .ToList();
-        }
+
+
+              // Get Users By Role
+              public List<UserResponseDto> GetUsersByRole(Enums.Role role)
+                {
+                         return repo.GetByRole(role)
+                                   .Select(u => MapToResponse(u))
+                                   .ToList();
+                       }
+
+
+
+                 // Register User
+                public UserResponseDto? RegisterUser(RegisterUserDto dto)
+                  {
+                  string normalizedEmail =dto.email.Trim().ToLower();
+
+                  string normalizedUsername =dto.userName.Trim();
+
+
+                   // Check Email
+                   if (repo.EmailExists(normalizedEmail))
+                    {
+                       return null;
+                      }
+
+                   // Check Username
+
+                 if (repo.UsernameExists(normalizedUsername))
+                 {
+                    return null;
+                   }
+
+
+                   User user = new User
+                    {
+                    userName = normalizedUsername,
+                    email = normalizedEmail,
+
+                     passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.password),
+
+                     fullName = dto.fullName,
+                     phoneNumber = dto.phoneNumber,
+                     address = dto.address,
+                     registrationDate = DateTime.UtcNow,
+                     isActive = true,
+                     role = Enums.Role.Customer
+                      };
+
+                    repo.RegisterUser(user);
+
+                   return MapToResponse(user);
               
-
-
-        // Register User
-
-        public UserResponseDto RegisterUser(RegisterUserDto dto)
-
-
-        {
-            dto.email=dto.email.Trim().ToLower();
-
-            // Check Email
-            if (repo.EmailExists(dto.email))
-                return null;
-
-            // Check Username
-            if (repo.UsernameExists(dto.userName))
-                return null;
-
-            User user = new User
-            {
-                userName = dto.userName,
-                email = dto.email,
-                passwordHash =BCrypt.Net.BCrypt.HashPassword(dto.password),
-                fullName = dto.fullName,
-                phoneNumber =dto.phoneNumber,
-                address = dto.address,
-                registrationDate =DateTime.Now,
-                isActive =true,
-                role = "Customer"
-            };
-
-            repo.RegisterUser(user);
-            return MapToResponse(user);
-        }
-
-
-        // Login
-
-        public UserResponseDto LoginUser(LoginDto dto)
-        {
-
-            dto.email = dto.email.Trim().ToLower();
-
-
-            // Search by email
-            User user = repo.GetUserByEmail(dto.email);
-
-            if (user == null)
-                throw new KeyNotFoundException("User not found");
-
-            // Check if account is active
-            if (!user.isActive)
-
-                throw new UnauthorizedAccessException("User account is inactive");
-
-            // Check password
-
-            bool validPassword = BCrypt.Net.BCrypt.Verify(dto.password, user.passwordHash);
-            if (!validPassword)
-                throw new UnauthorizedAccessException("Invalid password");
-
-
-            // Create Response DTO
-
-            return MapToResponse(user);
         
-        }
 
 
 
 
+        
+                     }
 
-   
+                 // Login User
+                 public UserResponseDto? LoginUser(LoginDto dto)
+                   {
+                   string normalizedEmail =dto.email.Trim().ToLower();
+
+                   User? user = repo.GetUserByEmail(normalizedEmail);
+
+                      if (user == null)
+                      {
+                        return null;
+                           }
+
+                      if (!user.isActive)
+                       {
+                          return null;
+                            }
+
+                bool validPassword = BCrypt.Net.BCrypt.Verify( dto.password,user.passwordHash);
+
+                  if (!validPassword)
+                   {
+                        return null;
+                      }
+
+                     return MapToResponse(user);
+                    }
 
 
-        // Update Profile
-        public void UpdateUserProfile(int id, UpdateUserDto dto)
-        {
-            User user = repo.GetUserById(id);
 
-            if (user == null)
-                throw new  KeyNotFoundException("User not found.");
+                    // Update Profile
+                public UserResponseDto? UpdateUserProfile(int id,UpdateUserDto dto)
+                  {
+                    User? user = repo.GetUserById(id);
 
-            if (dto.fullName != null)
+                    if (user == null)
+                   {
+                       return null;
+                     }
+
+                  if (!string.IsNullOrWhiteSpace(dto.fullName))
+                   {
                 user.fullName = dto.fullName;
+                 }
 
-            if (dto.phoneNumber != null)
+                 if (!string.IsNullOrWhiteSpace(dto.phoneNumber))
+                {
                 user.phoneNumber = dto.phoneNumber;
+                 }
 
-            if (dto.address != null)
+                if (!string.IsNullOrWhiteSpace(dto.address))
+                {
                 user.address = dto.address;
+                 }
+
+                 repo.UpdateUser();
+
+                  return MapToResponse(user);
+                  }
 
 
-            repo.UpdateUser(user);
-        }
 
 
+              // Change Password
+                public bool ChangeUserPassword(int id,ChangePasswordDto dto)
+                  {
+                       User? user = repo.GetUserById(id);
 
-        // Change Password
-        public void ChangeUserPassword(int id, ChangePasswordDto dto)
-        {
-            User user = repo.GetUserById(id);
+                       if (user == null)
+                      {
+                        return false;
+                       }
 
-            if (user == null)
-                throw new KeyNotFoundException("User not found.");
+            bool validPassword =BCrypt.Net.BCrypt.Verify( dto.currentPassword,user.passwordHash);
 
-   
-            bool validPassword = BCrypt.Net.BCrypt.Verify(dto.currentPassword, user.passwordHash);
+                     if (!validPassword)
+                       {
+                        return false;
+                         }
 
-            if (!validPassword)
-                throw new  UnauthorizedAccessException("Current password is incorrect.");
-
-            if (dto.currentPassword == dto.newPassword)
-                throw new InvalidOperationException(
-                    "New password must be different from the current password.");
-
+                      if (dto.currentPassword == dto.newPassword)
+                    {
+                         return false;
+                       }
 
             user.passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.newPassword);
 
+                 repo.UpdateUser();
 
-            repo.UpdateUser(user);
+                     return true;
+                      }
+
+
+
+                       // Activate / Deactivate User
+                    public bool SetUserActiveStatus(int id,SetActiveStatusDto dto)
+                      {
+                      User? user = repo.GetUserById(id);
+
+                        if (user == null)
+                         {
+                         return false;
+                           }
+ 
+                    user.isActive = dto.isActive;
+
+                    repo.UpdateUser();
+
+                      return true;
         }
-
-
-
-
-        // Activate / Deactivate User
-        public void SetUserActiveStatus(int id, SetActiveStatusDto dto)
-        {
-            User user =repo.GetUserById(id);
-
-            if (user == null)
-                throw new KeyNotFoundException("User not found.");
-
-            user.isActive =dto.Isactive;
-
-            repo.UpdateUser(user);
-
-
-
-
-
-
-
-
-
-
-
-
-
-        }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
-
+}
