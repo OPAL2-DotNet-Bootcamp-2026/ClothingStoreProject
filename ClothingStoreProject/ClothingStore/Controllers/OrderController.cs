@@ -15,6 +15,19 @@ namespace ClothingStore.Controllers{
             service = _service;
         }
         
+        // TODO: replace [FromQuery] int userId with User.FindFirst("userId") once
+        // JWT auth middleware is wired into Program.cs
+        
+        [HttpGet]
+        // [Authorize(Roles = "Admin")] — enable once auth middleware is registered
+        public IActionResult GetAll()
+        {
+            var orders = service.GetAll();
+            return Ok(orders);
+        }
+        
+        
+        
     }
 
 
