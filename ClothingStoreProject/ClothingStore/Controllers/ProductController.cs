@@ -88,5 +88,13 @@ namespace ClothingStore.Controllers
 
             return Ok(products);
         }
+
+        [HttpGet("GetAvailableProducts")]
+        public IActionResult GetAvailableProducts()
+        {
+            List<ProductListItemDto> products = productService.GetAvailableProducts();
+
+            return Ok(products);
+        }
     }
 }
