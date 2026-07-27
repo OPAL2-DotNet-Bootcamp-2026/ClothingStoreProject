@@ -68,11 +68,21 @@ namespace ClothingStore.Controllers
 
         [HttpPatch("UpdateStatus/{id}")]
         // Authorize admin role
-        public IActionResult UpdateStatus([FromRoute] int id, [FromBody] UpdateOrderStatusDto dto)
+        public async Task<IActionResult> UpdateStatus([FromRoute] int id, [FromBody] UpdateOrderStatusDto dto)
         {
-            var updated = service.UpdateStatus(id, dto);
-            if (!updated)
+            var order = service.GetById(id);
+            if (order == null)
                 return NotFound($"Order with id {id} not found.");
+
+            service.UpdateStatus(id, dto);
+
+            var user = _userRepo.GetUserById(order.UserId);
+            if (user != null)
+                await _emailService.SendAsync(
+                    user.email,
+                    "Order Status Updated",
+                    $"<h1>Hi {user.fullName},</h1><p>Your order #{id} status has been updated to <strong>{dto.Status}</strong>.</p>"
+                );
 
             return NoContent();
         }
