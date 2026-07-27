@@ -51,10 +51,27 @@ namespace ClothingStore.Controllers
                 return BadRequest("Product Id must be greater than 0.");
             }
 
-            List<VariantResponseDto> variants =
-                productVariantService.GetVariantsByProduct(productId);
+            List<VariantResponseDto> variants = productVariantService.GetVariantsByProduct(productId);
 
             return Ok(variants);
+        }
+
+        [HttpGet("GetVariantBySku")]
+        public IActionResult GetVariantBySku([FromQuery] string sku)
+        {
+            if (string.IsNullOrWhiteSpace(sku))
+            {
+                return BadRequest("SKU is required.");
+            }
+
+            VariantResponseDto? variant = productVariantService.GetVariantBySku(sku);
+
+            if (variant == null)
+            {
+                return NotFound("Variant was not found.");
+            }
+
+            return Ok(variant);
         }
     }
 }
