@@ -16,12 +16,12 @@ namespace ClothingStore.Repos
             return context.Brands.ToList();
         }
 
-        public Brand GetById(int id)
+        public Brand? GetById(int id)
         {
             return context.Brands.FirstOrDefault(b => b.brandId == id);
         }
 
-        public Brand GetByName(string name)
+        public Brand? GetByName(string name)
         {
             return context.Brands.FirstOrDefault(b => b.brandName == name);
         }

@@ -34,14 +34,16 @@ namespace ClothingStore.Services
 
         public BrandResponseDto? AddBrand(CreateBrandDto dto)
         {
-            if (brandRepo.NameExists(dto.brandName))
+            string trimmedName = dto.brandName.Trim();
+
+            if (brandRepo.NameExists(trimmedName))
             {
                 return null;
             }
 
             Brand brand = new Brand
             {
-                brandName = dto.brandName,
+                brandName = trimmedName,
                 description = dto.description,
                 logoUrl = dto.logoUrl,
                 websiteUrl = dto.websiteUrl,
@@ -64,12 +66,14 @@ namespace ClothingStore.Services
 
             if (!string.IsNullOrWhiteSpace(dto.brandName))
             {
-                if (dto.brandName != brand.brandName && brandRepo.NameExists(dto.brandName))
+                string trimmedName = dto.brandName.Trim();
+
+                if (trimmedName != brand.brandName && brandRepo.NameExists(trimmedName))
                 {
                     return null;
                 }
 
-                brand.brandName = dto.brandName;
+                brand.brandName = trimmedName;
             }
 
             if (dto.description != null)
