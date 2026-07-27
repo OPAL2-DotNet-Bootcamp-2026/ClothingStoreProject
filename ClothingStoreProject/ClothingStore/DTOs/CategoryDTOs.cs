@@ -9,6 +9,7 @@ namespace ClothingStore.DTOs
         public string? description { get; set; }
         public string? imageUrl { get; set; }
         public int? parentCategoryId { get; set; }
+        public bool isActive { get; set; }
     }
 
     public class CreateCategoryDto
@@ -28,6 +29,8 @@ namespace ClothingStore.DTOs
 
         [Range(1, int.MaxValue, ErrorMessage = "parentCategoryId must be a positive number")]
         public int? parentCategoryId { get; set; }
+
+        public bool isActive { get; set; }
     }
 
     public class UpdateCategoryDto
