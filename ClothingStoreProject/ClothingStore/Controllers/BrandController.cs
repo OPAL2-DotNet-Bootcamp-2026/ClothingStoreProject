@@ -8,7 +8,7 @@ namespace ClothingStore.Controllers
     [ApiController]
     public class BrandController : ControllerBase
     {
-        private BrandService service;
+        private readonly BrandService service;
 
         public BrandController(BrandService _service)
         {
@@ -34,14 +34,14 @@ namespace ClothingStore.Controllers
             return Ok(brand);
         }
 
-        
+
         [HttpPost("AddBrand")]
         public IActionResult AddBrand([FromBody] CreateBrandDto dto)
         {
             var brand = service.AddBrand(dto);
 
             if (brand == null)
-                return BadRequest("A brand with this name already exists.");
+                return Conflict("A brand with this name already exists.");
 
             return CreatedAtAction(nameof(GetBrandById), new { id = brand.brandId }, brand);
         }
@@ -49,15 +49,20 @@ namespace ClothingStore.Controllers
         [HttpPut("UpdateBrand")]
         public IActionResult UpdateBrand([FromQuery] int id, [FromBody] UpdateBrandDto dto)
         {
+            var existing = service.GetBrandById(id);
+
+            if (existing == null)
+                return NotFound("Brand not found.");
+
             var brand = service.UpdateBrand(id, dto);
 
             if (brand == null)
-                return BadRequest("Brand not found or the requested name is already in use.");
+                return Conflict("A brand with this name already exists.");
 
             return Ok(brand);
         }
 
-        [HttpDelete("DeactivateBrand")]
+        [HttpPatch("DeactivateBrand")]
         public IActionResult DeactivateBrand([FromQuery] int id)
         {
             var deactivated = service.DeactivateBrand(id);
