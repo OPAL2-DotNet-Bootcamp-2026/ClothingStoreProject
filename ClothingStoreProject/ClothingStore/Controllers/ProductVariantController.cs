@@ -91,5 +91,23 @@ namespace ClothingStore.Controllers
                 new { id = variant.variantId },
                 variant);
         }
+
+        [HttpPut("UpdateVariant")]
+        public IActionResult UpdateVariant([FromQuery] int id,[FromBody] UpdateVariantDto dto)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Variant Id must be greater than 0.");
+            }
+
+            VariantResponseDto? variant = productVariantService.UpdateVariant(id, dto);
+
+            if (variant == null)
+            {
+                return NotFound("Variant was not found.");
+            }
+
+            return Ok(variant);
+        }
     }
 }
