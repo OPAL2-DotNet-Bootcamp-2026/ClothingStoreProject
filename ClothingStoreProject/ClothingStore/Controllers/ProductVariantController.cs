@@ -1,6 +1,19 @@
-﻿namespace ClothingStore.Controllers
+﻿using ClothingStore.Services;
+using Microsoft.AspNetCore.Mvc;
+
+namespace ClothingStore.Controllers
 {
-    public class ProductVariantController
+    [ApiController]
+    [Route("variant")]
+    public class ProductVariantController : ControllerBase
     {
+        private readonly ProductVariantService productVariantService;
+
+        public ProductVariantController(
+            ProductVariantService productVariantService)
+        {
+            this.productVariantService = productVariantService;
+        }
+
     }
 }
