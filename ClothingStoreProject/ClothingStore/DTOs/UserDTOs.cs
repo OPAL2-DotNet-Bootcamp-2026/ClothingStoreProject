@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
+using static ClothingStore.Enums;
 namespace ClothingStore.DTOs
 {
     public class UserDTOs
@@ -26,7 +26,7 @@ namespace ClothingStore.DTOs
 
             public bool isActive { get; set; }
 
-            public string role { get; set; }
+            public Role role { get; set; }
         }
 
 
@@ -136,7 +136,7 @@ namespace ClothingStore.DTOs
 
         public class SetActiveStatusDto
         {
-            public bool Isactive { get; set; }
+            public bool isActive { get; set; }
         }
 
 

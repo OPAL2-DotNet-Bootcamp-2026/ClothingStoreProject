@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using static ClothingStore.Enums;
 namespace ClothingStore.Models
 {
 
@@ -51,9 +51,9 @@ namespace ClothingStore.Models
         public bool isActive { get; set; } = true; // default value
 
 
-        [Required (ErrorMessage = "Role is required.")]
-        [MaxLength(20,ErrorMessage = "Role cannot exceed 20 characters.")]
-        public string role { get; set; } = "customer"; //from list by defualt = customer
+        [Required(ErrorMessage = "Role is required.")]
+        [MaxLength(20, ErrorMessage = "Role cannot exceed 20 characters.")]
+        public Role role { get; set; } = Role.Customer; //from list by defualt = customer
 
 
         public virtual List<Review> reviews { get; set; }= new List<Review>();//reverse navigation — one user has many Reviews

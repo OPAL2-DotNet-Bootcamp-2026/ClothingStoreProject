@@ -49,5 +49,17 @@
             Returned
 
         }
+
+
+        public enum Role
+        {
+            Customer,
+            Admin
+        }
+
+
+
+
+
     }
 }
