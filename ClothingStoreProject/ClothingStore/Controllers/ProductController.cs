@@ -67,5 +67,13 @@ namespace ClothingStore.Controllers
 
             return Ok(products);
         }
+
+        [HttpGet("GetProductsByGender")]
+        public IActionResult GetProductsByGender([FromQuery] Gender gender)
+        {
+            List<ProductListItemDto> products = productService.GetProductsByGender(gender);
+
+            return Ok(products);
+        }
     }
 }
