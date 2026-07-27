@@ -75,5 +75,18 @@ namespace ClothingStore.Controllers
 
             return Ok(products);
         }
+
+        [HttpGet("SearchProductsByName")]
+        public IActionResult SearchProductsByName([FromQuery] string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return BadRequest("Product name is required.");
+            }
+
+            List<ProductListItemDto> products = productService.SearchProductsByName(name);
+
+            return Ok(products);
+        }
     }
 }
