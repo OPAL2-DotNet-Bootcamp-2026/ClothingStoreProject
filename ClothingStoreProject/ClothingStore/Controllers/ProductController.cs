@@ -143,5 +143,23 @@ namespace ClothingStore.Controllers
 
             return Ok(updatedProduct);
         }
+
+        [HttpDelete("DeactivateProduct")]
+        public IActionResult DeactivateProduct([FromQuery] int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Product Id must be greater than 0.");
+            }
+
+            bool isDeactivated = productService.DeactivateProduct(id);
+
+            if (!isDeactivated)
+            {
+                return NotFound("Product was not found.");
+            }
+
+            return NoContent();
+        }
     }
 }
