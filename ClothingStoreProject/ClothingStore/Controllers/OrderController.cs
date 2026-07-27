@@ -41,6 +41,15 @@ namespace ClothingStore.Controllers{
 
             return Ok(order);
         }
+        [HttpPost("Checkout")]
+        public IActionResult Checkout([FromQuery] int userId, [FromBody] CreateOrderDto dto)
+        {
+            var order = service.Checkout(userId, dto);
+            if (order == null)
+                return BadRequest("Cart is empty, or one or more items no longer have enough stock.");
+
+            return CreatedAtAction(nameof(GetById), new { id = order.OrderId }, order);
+        }
         
         
         
