@@ -17,12 +17,12 @@ namespace ClothingStore.Repos
             return context.Categories.ToList();
         }
 
-        public Category GetById(int id)
+        public Category? GetById(int id)
         {
             return context.Categories.FirstOrDefault(c => c.categoryId == id);
         }
 
-        public Category GetByName(string name)
+        public Category? GetByName(string name)
         {
             return context.Categories.FirstOrDefault(c => c.categoryName == name);
         }
