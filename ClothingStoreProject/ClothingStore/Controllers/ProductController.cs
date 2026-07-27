@@ -42,6 +42,17 @@ namespace ClothingStore.Controllers
             return Ok(product);
         }
 
+        [HttpGet("GetProductsByBrand")]
+        public IActionResult GetProductsByBrand([FromQuery] int brandId)
+        {
+            if (brandId <= 0)
+            {
+                return BadRequest("Brand Id must be greater than 0.");
+            }
 
+            List<ProductListItemDto> products = productService.GetProductsByBrand(brandId);
+
+            return Ok(products);
+        }
     }
 }
