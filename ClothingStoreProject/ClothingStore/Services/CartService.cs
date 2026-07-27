@@ -41,12 +41,14 @@ namespace ClothingStore.Services
             if (variant == null)
                 return null;
 
-            if (variant.stockQuantity < dto.Quantity)
-                return null;
-
             var cart = GetOrCreateCart(userId);
 
             var existing = cartItemRepo.GetByCartAndVariant(cart.cartId, dto.VariantId);
+            int alreadyInCart = existing?.quantity ?? 0;
+
+            if (variant.stockQuantity < alreadyInCart + dto.Quantity)
+                return null;
+
             if (existing != null)
             {
                 existing.quantity += dto.Quantity;
@@ -109,16 +111,20 @@ namespace ClothingStore.Services
             {
                 CartId = cart.cartId,
                 UserId = cart.userId,
+                CreatedAt = cart.createdAt,
                 UpdatedAt = cart.updatedAt,
                 CartItems = cart.CartItems.Select(ci => new CartItemResponseDto
                 {
                     CartItemId = ci.cartItemId,
                     VariantId = ci.variantId,
                     Quantity = ci.quantity,
-                    Price = ci.ProductVariant?.price ?? 0
+                    Price = ci.ProductVariant?.price ?? 0,
+                    ProductName = ci.ProductVariant?.Product?.productName,
+                    Size = ci.ProductVariant?.size.ToString(),
+                    Color = ci.ProductVariant?.color,
+                    ImageUrl = ci.ProductVariant?.imageUrl
                 }).ToList()
             };
-
         }
     }
 }
