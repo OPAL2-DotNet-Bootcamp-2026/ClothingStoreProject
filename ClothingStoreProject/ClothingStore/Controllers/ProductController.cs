@@ -161,5 +161,23 @@ namespace ClothingStore.Controllers
 
             return NoContent();
         }
+
+        [HttpPatch("ToggleAvailability")]
+        public IActionResult ToggleAvailability([FromQuery] int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Product Id must be greater than 0.");
+            }
+
+            bool isToggled = productService.ToggleAvailability(id);
+
+            if (!isToggled)
+            {
+                return NotFound("Product was not found.");
+            }
+
+            return NoContent();
+        }
     }
 }
