@@ -1,6 +1,7 @@
 ﻿using ClothingStore.DTOs;
 using ClothingStore.Models;
 using ClothingStore.Repos;
+using System.ComponentModel;
 
 namespace ClothingStore.Services
 {
@@ -57,7 +58,9 @@ namespace ClothingStore.Services
 
         public CategoryResponseDto? AddCategory(CreateCategoryDto dto)
         {
-            if (categoryRepo.NameExists(dto.categoryName))
+            string trimmedName = dto.categoryName.Trim();
+
+            if (categoryRepo.NameExists(trimmedName))
             {
                 return null;
             }
@@ -74,7 +77,7 @@ namespace ClothingStore.Services
 
             Category category = new Category
             {
-                categoryName = dto.categoryName,
+                categoryName = trimmedName,
                 description = dto.description,
                 imageUrl = dto.imageUrl,
                 parentCategoryId = dto.parentCategoryId,
@@ -97,13 +100,16 @@ namespace ClothingStore.Services
 
             if (!string.IsNullOrWhiteSpace(dto.categoryName))
             {
-                if (dto.categoryName != category.categoryName && categoryRepo.NameExists(dto.categoryName))
+                string trimmedName = dto.categoryName.Trim();
+
+                if (trimmedName != category.categoryName && categoryRepo.NameExists(dto.categoryName))
                 {
                     return null;
                 }
 
-                category.categoryName = dto.categoryName;
+                category.categoryName = trimmedName;
             }
+
 
             if (dto.description != null)
             {
@@ -194,7 +200,9 @@ namespace ClothingStore.Services
                     return true;
                 }
 
-                Category? current = categoryRepo.GetById(currentId.Value);
+               
+
+                    Category? current = categoryRepo.GetById(currentId.Value);
                 currentId = current?.parentCategoryId;
             }
 
