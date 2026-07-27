@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using static ClothingStore.Enums;
-using static System.Enum;
 
 namespace ClothingStore.DTOs
 {
@@ -14,8 +13,7 @@ namespace ClothingStore.DTOs
         public string sku { get; set; }
 
         [Required(ErrorMessage = "Size is Required")]
-        [MaxLength(10, ErrorMessage = "Size Can't be more the 10 Characters")]
-        public string size { get; set; }
+        public _Size size { get; set; }
 
         [Required(ErrorMessage = "Color is Required")]
         [MaxLength(30, ErrorMessage = "Color Can't be more the 30 Characters")]
@@ -34,8 +32,7 @@ namespace ClothingStore.DTOs
 
     public class UpdateVariantDto
     {
-        [MaxLength(10, ErrorMessage = "Size Can't be more the 10 Characters")]
-        public string? size { get; set; }
+        public _Size? size { get; set; }
 
         [MaxLength(30, ErrorMessage = "Color Can't be more the 30 Characters")]
         public string? color { get; set; }
@@ -58,7 +55,7 @@ namespace ClothingStore.DTOs
         public int variantId { get; set; }
         public int ProductId { get; set; }
         public string sku { get; set; }
-        public string size { get; set; }
+        public _Size size { get; set; }
         public string color { get; set; }
         public decimal price { get; set; }
         public int stockQuantity { get; set; }
