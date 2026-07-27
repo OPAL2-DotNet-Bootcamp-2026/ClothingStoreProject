@@ -1,4 +1,5 @@
-﻿using ClothingStore.Services;
+﻿using ClothingStore.DTOs;
+using ClothingStore.Services;
 using Microsoft.AspNetCore.Mvc;
 using static ClothingStore.Enums;
 
@@ -15,5 +16,12 @@ namespace ClothingStore.Controllers
             this.productService = productService;
         }
 
+        [HttpGet("GetAllProducts")]
+        public IActionResult GetAllProducts()
+        {
+            List<ProductListItemDto> products = productService.GetAllProducts();
+
+            return Ok(products);
+        }
     }
 }
