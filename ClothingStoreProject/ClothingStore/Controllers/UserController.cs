@@ -104,7 +104,7 @@ namespace ClothingStore.Controllers
                  
                 if(user == null)
                 { 
-                    return BadRequest("Invalid email, password ,or inactive account.");
+                    return  Unauthorized("Invalid email or  password ");
                 }
 
                 return Ok(user);
