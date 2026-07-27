@@ -42,5 +42,19 @@ namespace ClothingStore.Controllers
 
             return Ok(variant);
         }
+
+        [HttpGet("GetVariantsByProduct")]
+        public IActionResult GetVariantsByProduct([FromQuery] int productId)
+        {
+            if (productId <= 0)
+            {
+                return BadRequest("Product Id must be greater than 0.");
+            }
+
+            List<VariantResponseDto> variants =
+                productVariantService.GetVariantsByProduct(productId);
+
+            return Ok(variants);
+        }
     }
 }
