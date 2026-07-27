@@ -1,4 +1,5 @@
-﻿using ClothingStore.Services;
+﻿using ClothingStore.DTOs;
+using ClothingStore.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClothingStore.Controllers
@@ -15,5 +16,12 @@ namespace ClothingStore.Controllers
             this.productVariantService = productVariantService;
         }
 
+        [HttpGet("GetAllVariants")]
+        public IActionResult GetAllVariants()
+        {
+            List<VariantResponseDto> variants = productVariantService.GetAllVariants();
+
+            return Ok(variants);
+        }
     }
 }
