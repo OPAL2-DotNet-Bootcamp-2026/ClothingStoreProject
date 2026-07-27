@@ -18,7 +18,7 @@ namespace ClothingStore.Repos
             return context.Orders.ToList();
         }
 
-        public Order GetById(int id)
+        public Order? GetById(int id)
         {
             return context.Orders
                 .Include(o => o.OrderItems)

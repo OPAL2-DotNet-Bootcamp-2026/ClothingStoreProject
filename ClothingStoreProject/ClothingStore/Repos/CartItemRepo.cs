@@ -12,7 +12,7 @@ namespace ClothingStore.Repos
             context = _context;
         }
 
-        public CartItem GetById(int id)
+        public CartItem? GetById(int id)
         {
             return context.CartItems
                 .Include(ci => ci.Cart)
@@ -20,7 +20,7 @@ namespace ClothingStore.Repos
                 .FirstOrDefault(ci => ci.cartItemId == id);
         }
 
-        public CartItem GetByCartAndVariant(int cartId, int variantId)
+        public CartItem? GetByCartAndVariant(int cartId, int variantId)
         {
             return context.CartItems
                 .FirstOrDefault(ci => ci.cartId == cartId && ci.variantId == variantId);

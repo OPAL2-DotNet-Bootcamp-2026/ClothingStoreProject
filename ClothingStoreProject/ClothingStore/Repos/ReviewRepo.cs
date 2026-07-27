@@ -19,7 +19,7 @@ namespace ClothingStore.Repos
 
         }
 
-        public Review GetReviewById(int id)
+        public Review? GetReviewById(int id)
         {
             return context.Reviews.FirstOrDefault(r => r.reviewId == id);
         }
