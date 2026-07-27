@@ -71,11 +71,9 @@ namespace ClothingStore.Controllers
         // Authorize admin role
         public async Task<IActionResult> UpdateStatus([FromRoute] int id, [FromBody] UpdateOrderStatusDto dto)
         {
-            var order = service.GetById(id);
+            var order = service.UpdateStatus(id, dto);
             if (order == null)
                 return NotFound($"Order with id {id} not found.");
-
-            service.UpdateStatus(id, dto);
 
             var user = _userRepo.GetUserById(order.UserId);
             if (user != null)

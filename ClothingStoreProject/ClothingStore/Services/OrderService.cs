@@ -90,15 +90,15 @@ namespace ClothingStore.Services
             return GetById(order.orderId);
         }
 
-        public bool UpdateStatus(int id, UpdateOrderStatusDto dto)
+        public OrderResponseDto? UpdateStatus(int id, UpdateOrderStatusDto dto)
         {
             var order = orderRepo.GetById(id);
             if (order == null)
-                return false;
+                return null;
 
             order.status = dto.Status;
             orderRepo.Update();
-            return true;
+            return MapToDetailDto(order);
         }
 
         private OrderResponseDto MapToListItemDto(Order order)
