@@ -19,7 +19,7 @@ namespace ClothingStore.Repos
                 .ToList();
         }
 
-        public ProductVariant GetById(int id)
+        public ProductVariant? GetById(int id)
         {
             return context.ProductsVariant
                 .Include(v => v.Product)
@@ -34,7 +34,7 @@ namespace ClothingStore.Repos
                 .ToList();
         }
 
-        public ProductVariant GetBySku(string sku)
+        public ProductVariant? GetBySku(string sku)
         {
             return context.ProductsVariant
                 .Include(v => v.Product)
