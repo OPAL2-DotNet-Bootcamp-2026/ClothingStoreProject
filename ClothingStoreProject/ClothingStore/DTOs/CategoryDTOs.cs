@@ -8,5 +8,14 @@
         public string? imageUrl {get; set;}
         public int? parentCategoryId {get; set;}
     }
+
+    public class CreateCategoryDto
+    {
+        public string categoryName {get; set;}
+        public string? description {get; set;}
+        public string? imageUrl {get; set;}
+        public int? parentCategoryId {get; set;}
+    }
+        public string? description {get; set;}
     }
 }
