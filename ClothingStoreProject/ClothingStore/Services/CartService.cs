@@ -17,7 +17,7 @@ namespace ClothingStore.Services
             variantRepo = _variantRepo;
         }
 
-    
+
         public Cart GetOrCreateCart(int userId)
         {
             var cart = cartRepo.GetByUserId(userId);
@@ -39,10 +39,10 @@ namespace ClothingStore.Services
         {
             var variant = variantRepo.GetById(dto.VariantId);
             if (variant == null)
-                return null; 
+                return null;
 
             if (variant.stockQuantity < dto.Quantity)
-                return null; 
+                return null;
 
             var cart = GetOrCreateCart(userId);
 
@@ -73,11 +73,11 @@ namespace ClothingStore.Services
         {
             var item = cartItemRepo.GetById(cartItemId);
             if (item == null || item.Cart.userId != userId)
-                return null; 
+                return null;
 
             var variant = variantRepo.GetById(item.variantId);
             if (variant != null && variant.stockQuantity < dto.Quantity)
-                return null; 
+                return null;
 
             item.quantity = dto.Quantity;
             cartItemRepo.Update();
@@ -115,9 +115,10 @@ namespace ClothingStore.Services
                     CartItemId = ci.cartItemId,
                     VariantId = ci.variantId,
                     Quantity = ci.quantity,
-                    UnitPrice = ci.ProductVariant?.price ?? 0 
+                    Price = ci.ProductVariant?.price ?? 0
                 }).ToList()
             };
 
+        }
     }
 }

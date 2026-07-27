@@ -1,6 +1,7 @@
-﻿using ClothingStore.DTOs;
+﻿using  ClothingStore.DTOs;
 using ClothingStore.Models;
 using ClothingStore.Repos;
+using static ClothingStore.DTOs.OrderDTOs;
 using static ClothingStore.Enums;
 
 namespace ClothingStore.Services
@@ -14,7 +15,7 @@ namespace ClothingStore.Services
         private CartRepo cartRepo;
         private CartItemRepo cartItemRepo;
         private ProductVariantRepo variantRepo;
-        
+
         public OrderService(OrderRepo _orderRepo, OrderItemRepo _orderItemRepo, CartRepo _cartRepo,
             CartItemRepo _cartItemRepo, ProductVariantRepo _variantRepo) //constructer 
         {
@@ -24,23 +25,23 @@ namespace ClothingStore.Services
             cartItemRepo = _cartItemRepo;
             variantRepo = _variantRepo;
         }
-        public List<OrderListItemDto> GetAll()
+        public List<OrderResponseDto> GetAll()
         {
             return orderRepo.GetAll().Select(MapToListItemDto).ToList();
         }
 
-        public List<OrderListItemDto> GetByUserId(int userId)
+        public List<OrderResponseDto> GetByUserId(int userId)
         {
             return orderRepo.GetByUserId(userId).Select(MapToListItemDto).ToList();
         }
 
-        public OrderDetailDto GetById(int id)
+        public OrderResponseDto? GetById(int id)
         {
             var order = orderRepo.GetById(id);
             return order == null ? null : MapToDetailDto(order);
         }
-        
-        public OrderDetailDto Checkout(int userId, CreateOrderDto dto)
+
+        public OrderResponseDto? Checkout(int userId, CreateOrderDto dto)
         {
             var cart = cartRepo.GetByUserId(userId);
             if (cart == null || !cart.CartItems.Any())
@@ -99,10 +100,10 @@ namespace ClothingStore.Services
             orderRepo.Update();
             return true;
         }
-        
-        private OrderListItemDto MapToListItemDto(Order order)
+
+        private OrderResponseDto MapToListItemDto(Order order)
         {
-            return new OrderListItemDto
+            return new OrderResponseDto
             {
                 OrderId = order.orderId,
                 UserId = order.userId,
@@ -111,9 +112,9 @@ namespace ClothingStore.Services
                 Status = order.status
             };
         }
-        private OrderDetailDto MapToDetailDto(Order order)
+        private OrderResponseDto MapToDetailDto(Order order)
         {
-            return new OrderDetailDto
+            return new OrderResponseDto
             {
                 OrderId = order.orderId,
                 UserId = order.userId,
@@ -129,5 +130,6 @@ namespace ClothingStore.Services
                     UnitPrice = oi.unitPrice
                 }).ToList()
             };
+        }
     }
 }

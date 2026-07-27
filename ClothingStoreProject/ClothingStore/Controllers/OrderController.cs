@@ -1,7 +1,8 @@
-﻿using ClothingStore.DTOs;
+﻿using static ClothingStore.DTOs.OrderDTOs;
 using ClothingStore.Repos;
 using ClothingStore.Services;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace ClothingStore.Controllers
 {

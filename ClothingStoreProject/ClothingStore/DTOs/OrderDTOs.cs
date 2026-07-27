@@ -1,4 +1,7 @@
-﻿namespace ClothingStore.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+using static ClothingStore.Enums;
+
+namespace ClothingStore.DTOs
 {
     public class OrderDTOs
     {
@@ -9,7 +12,7 @@
             public int UserId { get; set; }
             public DateTime OrderDate { get; set; }
             public decimal TotalAmount { get; set; } // Computed server-side by OrderService
-            public string Status { get; set; }
+            public OrderStatus Status { get; set; }
             public string ShippingAddress { get; set; }
         
             // OrderItems nested inside the order response DTO
@@ -38,7 +41,7 @@
         {
             [Required(ErrorMessage = "Status is required.")]
             [StringLength(30, ErrorMessage = "Status cannot exceed 30 characters.")]
-            public string Status { get; set; } // Admin Input
+            public OrderStatus Status { get; set; } // Admin Input
         }
     }
 }
