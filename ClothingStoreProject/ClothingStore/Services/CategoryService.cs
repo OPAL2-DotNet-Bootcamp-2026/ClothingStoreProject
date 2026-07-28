@@ -1,7 +1,6 @@
 ﻿using ClothingStore.DTOs;
 using ClothingStore.Models;
 using ClothingStore.Repos;
-using System.ComponentModel;
 
 namespace ClothingStore.Services
 {
@@ -102,14 +101,13 @@ namespace ClothingStore.Services
             {
                 string trimmedName = dto.categoryName.Trim();
 
-                if (trimmedName != category.categoryName && categoryRepo.NameExists(dto.categoryName))
+                if (trimmedName != category.categoryName && categoryRepo.NameExists(trimmedName))
                 {
                     return null;
                 }
 
                 category.categoryName = trimmedName;
             }
-
 
             if (dto.description != null)
             {
@@ -121,7 +119,12 @@ namespace ClothingStore.Services
                 category.imageUrl = dto.imageUrl;
             }
 
-            if (dto.parentCategoryId.HasValue)
+          
+            if (dto.removeParentCategory)
+            {
+                category.parentCategoryId = null;
+            }
+            else if (dto.parentCategoryId.HasValue)
             {
                 int newParentId = dto.parentCategoryId.Value;
 
@@ -137,7 +140,6 @@ namespace ClothingStore.Services
                     return null;
                 }
 
-              
                 if (WouldCreateCycle(category.categoryId, newParentId))
                 {
                     return null;
@@ -191,6 +193,7 @@ namespace ClothingStore.Services
 
         private bool WouldCreateCycle(int categoryId, int newParentId)
         {
+            var visited = new HashSet<int>();
             int? currentId = newParentId;
 
             while (currentId.HasValue)
@@ -200,9 +203,12 @@ namespace ClothingStore.Services
                     return true;
                 }
 
-               
+                if (!visited.Add(currentId.Value))
+                {
+                    return true;
+                }
 
-                    Category? current = categoryRepo.GetById(currentId.Value);
+                Category? current = categoryRepo.GetById(currentId.Value);
                 currentId = current?.parentCategoryId;
             }
 
@@ -237,4 +243,3 @@ namespace ClothingStore.Services
         }
     }
 }
-

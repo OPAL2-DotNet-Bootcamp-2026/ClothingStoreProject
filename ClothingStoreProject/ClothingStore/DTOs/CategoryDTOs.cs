@@ -47,7 +47,7 @@ namespace ClothingStore.DTOs
 
         [Range(1, int.MaxValue, ErrorMessage = "parentCategoryId must be a positive number")]
         public int? parentCategoryId { get; set; }
-
+        public bool removeParentCategory { get; set; } = false;
     }
 }
     
