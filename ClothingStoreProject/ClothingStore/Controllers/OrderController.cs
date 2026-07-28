@@ -1,11 +1,13 @@
-﻿using static ClothingStore.DTOs.OrderDTOs;
-using ClothingStore.Repos;
+﻿using ClothingStore.Repos;
 using ClothingStore.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
+using static ClothingStore.DTOs.OrderDTOs;
 
 
 namespace ClothingStore.Controllers
 {
+    [EnableRateLimiting("public")]
     [Route("order")]
     [ApiController]
     public class OrderController : ControllerBase
@@ -23,6 +25,7 @@ namespace ClothingStore.Controllers
 
         // TODO: replace [FromQuery] int userId with User.FindFirst("userId") once
         // JWT auth middleware is wired into Program.cs.
+
 
         [HttpGet]
         // [Authorize admi rol] 

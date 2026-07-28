@@ -1,12 +1,13 @@
 ﻿using ClothingStore.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using static ClothingStore.DTOs.UserDTOs;
 
 namespace ClothingStore.Controllers
 {
- 
-        [ApiController]
-        [Route("user")]
+    [EnableRateLimiting("public")]
+    [ApiController]
+    [Route("user")]
         public class UserController : ControllerBase
         {
             private UserService userService;

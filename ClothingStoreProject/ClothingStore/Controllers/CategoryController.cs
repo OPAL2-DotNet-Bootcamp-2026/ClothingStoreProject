@@ -1,9 +1,10 @@
 ﻿using ClothingStore.DTOs;
 using ClothingStore.Services;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.RateLimiting;
 namespace ClothingStore.Controllers
 {
+    [EnableRateLimiting("public")]
     [Route("category")]
     [ApiController]
     public class CategoryController : ControllerBase

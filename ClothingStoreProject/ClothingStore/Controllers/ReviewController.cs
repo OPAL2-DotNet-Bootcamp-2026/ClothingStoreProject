@@ -1,9 +1,13 @@
 ﻿using ClothingStore.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using static ClothingStore.DTOs.ReviewDTOs;
 
 namespace ClothingStore.Controllers
 {
+    [EnableRateLimiting("public")]
+    [ApiController]
+    [Route("review")]
     public class ReviewController : ControllerBase
     {
 
