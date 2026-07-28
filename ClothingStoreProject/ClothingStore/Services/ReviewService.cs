@@ -92,7 +92,7 @@ namespace ClothingStore.Services
 
         public ReviewResponseDto? AddReview(int userId, CreateReviewDto dto)
         {
-            Review? exists = repo.(userId, dto.ProductId);
+            Review? exists = repo.GetByUserAndProduct(userId, dto.ProductId);
 
             if (exists != null)
                 return null;
@@ -173,7 +173,7 @@ namespace ClothingStore.Services
 
 
 
-    }
+    
 
 
 
@@ -196,7 +196,7 @@ namespace ClothingStore.Services
 
 
 
-}
+
 
     
 
