@@ -5,16 +5,16 @@ namespace ClothingStore
 {
     public class ClothingStoreContext : DbContext
     {
-        public DbSet<User> users {  get; set; }
-        public DbSet<Brand> brands { get; set; }
-        public DbSet<Cart> carts { get; set; }
-        public DbSet<CartItem> cartItems { get; set; }
-        public DbSet<Category> categories { get; set; }
-        public DbSet<Order> orders { get; set; }
-        public DbSet<OrderItem> orderItems { get; set; }
-        public DbSet<Product> products { get; set; }
-        public DbSet<ProductVariant> productsVariant { get; set; }
-        public DbSet<Review> reviews { get; set; }
+        public DbSet<User> Users {  get; set; }
+        public DbSet<Brand> Brands { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductVariant> ProductsVariant { get; set; }
+        public DbSet<Review> Reviews { get; set; }
 
         public ClothingStoreContext(DbContextOptions<ClothingStoreContext> options) : base(options)
         {

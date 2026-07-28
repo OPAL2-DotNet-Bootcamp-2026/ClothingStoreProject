@@ -26,5 +26,40 @@
             FallWinter,
             AllSeason
         }
+
+        public enum _Size
+        {
+            XS,
+            S,
+            M,
+            L,
+            XL,
+            XXL,
+            XXXL
+        }
+
+        public enum OrderStatus
+        {
+            Pending,
+            Dispatched,     
+            OutForDelivery, 
+            Delivered,      
+            DeliveryFailed, 
+            Cancelled,      
+            Returned
+
+        }
+
+
+        public enum Role
+        {
+            Customer,
+            Admin
+        }
+
+
+
+
+
     }
 }
