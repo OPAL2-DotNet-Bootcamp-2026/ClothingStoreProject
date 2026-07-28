@@ -23,6 +23,9 @@ namespace ClothingStore.Controllers
         public IActionResult GetCart([FromRoute] int userId)
         {
             var cart = service.GetByUserId(userId);
+            if (cart == null)
+                return NotFound("No cart found for this user.");
+
             return Ok(cart);
         }
 

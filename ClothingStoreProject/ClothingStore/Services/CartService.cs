@@ -29,9 +29,12 @@ namespace ClothingStore.Services
             return cart;
         }
 
-        public CartResponseDto GetByUserId(int userId)
+        public CartResponseDto? GetByUserId(int userId)
         {
-            var cart = GetOrCreateCart(userId);
+            var cart = cartRepo.GetByUserId(userId);
+            if (cart == null)
+                return null;
+
             return MapToDto(cart);
         }
 
