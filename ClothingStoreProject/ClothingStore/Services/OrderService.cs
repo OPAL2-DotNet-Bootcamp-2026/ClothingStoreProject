@@ -47,9 +47,12 @@ namespace ClothingStore.Services
             if (cart == null || !cart.CartItems.Any())
                 return null; // Controller translates -> BadRequest("Cart is empty.")
 
+            var variantIds = cart.CartItems.Select(ci => ci.variantId).ToList();
+            var variants = variantIds.ToDictionary(id => id, id => variantRepo.GetById(id));
+
             foreach (var cartItem in cart.CartItems)
             {
-                var variant = variantRepo.GetById(cartItem.variantId);
+                var variant = variants[cartItem.variantId];
                 if (variant == null || variant.stockQuantity < cartItem.quantity)
                     return null; // Controller translates -> BadRequest("Item out of stock: ...")
             }
@@ -67,7 +70,7 @@ namespace ClothingStore.Services
             decimal total = 0;
             foreach (var cartItem in cart.CartItems)
             {
-                var variant = variantRepo.GetById(cartItem.variantId);
+                var variant = variants[cartItem.variantId];
 
                 var orderItem = new OrderItem
                 {

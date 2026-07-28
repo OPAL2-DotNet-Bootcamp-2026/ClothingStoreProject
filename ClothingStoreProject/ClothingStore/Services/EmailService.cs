@@ -23,8 +23,11 @@ public class EmailService : IEmailService
             message.Subject = subject;
             message.Body = new TextPart("html") { Text = body };
 
+            if (!int.TryParse(_config["Email:Port"], out int port))
+                return;
+
             using var smtp = new SmtpClient();
-            await smtp.ConnectAsync(_config["Email:Host"], int.Parse(_config["Email:Port"]), true);
+            await smtp.ConnectAsync(_config["Email:Host"], port, true);
             await smtp.AuthenticateAsync(_config["Email:Username"], _config["Email:Password"]);
             await smtp.SendAsync(message);
             await smtp.DisconnectAsync(true);
