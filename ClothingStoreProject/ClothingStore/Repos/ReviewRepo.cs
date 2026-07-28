@@ -58,6 +58,25 @@ namespace ClothingStore.Repos
         }
 
 
+
+        public List<Review> GetByMinRating(int rating)
+        {
+            return context.Reviews
+                .Where(r => r.rating == rating)
+                .ToList();
+        }
+
+
+
+        public Review? GetByUserAndProduct(int userId, int productId)
+        {
+            return context.Reviews.FirstOrDefault(r =>
+                r.userId == userId &&
+                r.productId == productId);
+        }
+
+
+
         public void UpdateReview(Review review)
         {
             context.SaveChanges();
