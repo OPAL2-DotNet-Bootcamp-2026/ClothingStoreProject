@@ -125,7 +125,7 @@ namespace ClothingStore.DTOs
 
 
             [Required(ErrorMessage = "Please confirm your new password.")]
-            [Compare("NewPassword", ErrorMessage = "Passwords do not match.")]
+            [Compare("newPassword", ErrorMessage = "Passwords do not match.")]
             public string confirmPassword { get; set; }
         }
 
