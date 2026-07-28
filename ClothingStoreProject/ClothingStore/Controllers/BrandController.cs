@@ -19,6 +19,10 @@ namespace ClothingStore.Controllers
         public IActionResult GetAllBrands()
         {
             var brands = service.GetAllBrands();
+            if (brands.Count == 0) 
+            { 
+                return NoContent();
+            }
             return Ok(brands);
         }
 
