@@ -1,7 +1,9 @@
 
 using ClothingStore.Repos;
 using ClothingStore.Services;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.RateLimiting;
 
 namespace ClothingStore
 {
@@ -51,8 +53,30 @@ namespace ClothingStore
 
 
             builder.Services.AddControllers();
-            
-            
+            builder.Services.AddRateLimiter(options =>
+            {
+                // Sliding window — for public endpoints (products, categories, brands, reviews)
+                options.AddSlidingWindowLimiter("public", opt =>
+                {
+                    opt.PermitLimit = 100;
+                    opt.Window = TimeSpan.FromMinutes(1);
+                    opt.SegmentsPerWindow = 6; // splits window into 6 x 10s segments
+                    opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+                    opt.QueueLimit = 10;
+                });
+
+                // Fixed window — for non-public endpoints (cart, orders, users)
+                options.AddFixedWindowLimiter("private", opt =>
+                {
+                    opt.PermitLimit = 50;
+                    opt.Window = TimeSpan.FromMinutes(1);
+                    opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+                    opt.QueueLimit = 5;
+                });
+
+                options.RejectionStatusCode = 429;
+            });
+
 
             var app = builder.Build();
 
@@ -61,11 +85,11 @@ namespace ClothingStore
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-                app.MapGet("/", () => Results.Redirect("/swagger")); 
+                app.MapGet("/", () => Results.Redirect("/swagger"));
             }
 
             app.UseHttpsRedirection();
-
+            app.UseRateLimiter();
             app.UseAuthorization();
 
 
