@@ -29,6 +29,8 @@ namespace ClothingStore.Models
 
         [ForeignKey("ParentCategory")]
         public int? parentCategoryId { get; set; }      // from list — nullable
+
+        public bool isActive { get; set; }
       
         public virtual Category? ParentCategory { get; set; }   // navigation 
 
