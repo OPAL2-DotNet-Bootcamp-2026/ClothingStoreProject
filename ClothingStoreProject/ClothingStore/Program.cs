@@ -1,8 +1,12 @@
 
 using ClothingStore.Repos;
 using ClothingStore.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
 using System.Threading.RateLimiting;
 
 namespace ClothingStore
@@ -13,10 +17,7 @@ namespace ClothingStore
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            //Swagger
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
+            // Register Context
             builder.Services.AddDbContext<ClothingStoreContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -36,15 +37,61 @@ namespace ClothingStore
             builder.Services.AddScoped<BrandService>();
             builder.Services.AddScoped<CartService>();
             builder.Services.AddScoped<CategoryService>();
-            builder.Services.AddScoped<EmailService>();
             builder.Services.AddScoped<OrderService>();
             builder.Services.AddScoped<ProductService>();
             builder.Services.AddScoped<ProductVariantService>();
             builder.Services.AddScoped<ReviewService>();
             builder.Services.AddScoped<UserService>();
+            builder.Services.AddScoped<IEmailService,EmailService>();
 
+            // ── JWT Authentication ─────────────────────────────────────────────
+            builder.Services.AddScoped<AuthService>();
 
+            var jwtKey = builder.Configuration["JwtSettings:SecretKey"];
+            var jwtIssuer = builder.Configuration["JwtSettings:Issuer"];
+            var jwtAudience = builder.Configuration["JwtSettings:Audience"];
 
+            builder.Services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.MapInboundClaims = false;
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = jwtIssuer,
+                        ValidAudience = jwtAudience,
+                        RoleClaimType = "role",
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                                                       Encoding.UTF8.GetBytes(jwtKey))
+                    };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnAuthenticationFailed = context =>
+                        {
+                            var error = context.Exception.Message;
+                            return Task.CompletedTask;
+                        },
+                        OnTokenValidated = context =>
+                        {
+                            var claims = context.Principal.Claims.ToList();
+                            return Task.CompletedTask;
+                        },
+                        OnChallenge = context =>
+                        {
+                            var error = context.Error;
+                            var desc = context.ErrorDescription;
+                            return Task.CompletedTask;
+                        }
+                    };
+                });
+
+            builder.Services.AddAuthorization();
 
 
 
@@ -53,6 +100,7 @@ namespace ClothingStore
 
 
             builder.Services.AddControllers();
+
             builder.Services.AddRateLimiter(options =>
             {
                 // Sliding window — for public endpoints (products, categories, brands, reviews)
@@ -77,6 +125,36 @@ namespace ClothingStore
                 options.RejectionStatusCode = 429;
             });
 
+            //Swagger
+            builder.Services.AddEndpointsApiExplorer();
+
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Enter your JWT token in the box below"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id   = "Bearer"
+                }
+            },
+            new List<string>()
+        }
+    });
+            });
 
             var app = builder.Build();
 
@@ -89,6 +167,7 @@ namespace ClothingStore
             }
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseRateLimiter();
             app.UseAuthorization();
 
