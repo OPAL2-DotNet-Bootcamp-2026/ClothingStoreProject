@@ -1,5 +1,6 @@
 using MailKit.Net.Smtp;
 using MimeKit;
+using System.Threading.RateLimiting;
 
 public interface IEmailService
 {
@@ -9,12 +10,20 @@ public interface IEmailService
 public class EmailService : IEmailService
 {
     private readonly IConfiguration _config;
-    public EmailService(IConfiguration config)
+    private readonly RateLimiter _rateLimiter;
+
+    public EmailService(IConfiguration config, RateLimiter rateLimiter)
     {
         _config = config;
+        _rateLimiter = rateLimiter;
     }
+
     public async Task SendAsync(string toEmail, string subject, string body)
     {
+        using var lease = await _rateLimiter.AcquireAsync(1);
+        if (!lease.IsAcquired)
+            return;
+
         try
         {
             var message = new MimeMessage();
@@ -34,8 +43,6 @@ public class EmailService : IEmailService
         }
         catch (Exception)
         {
-            // Email failure must not affect the calling operation (checkout, status update, etc.)
-        }
+        }
     }
-
 }

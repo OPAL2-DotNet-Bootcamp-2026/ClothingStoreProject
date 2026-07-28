@@ -2,9 +2,10 @@
 using ClothingStore.Services;
 using Microsoft.AspNetCore.Mvc;
 using static ClothingStore.Enums;
-
+using Microsoft.AspNetCore.RateLimiting;
 namespace ClothingStore.Controllers
 {
+    [EnableRateLimiting("public")]
     [ApiController]
     [Route("product")]
     public class ProductController : ControllerBase
