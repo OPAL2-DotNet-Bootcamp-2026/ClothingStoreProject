@@ -11,6 +11,10 @@ namespace ClothingStore
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            //Swagger
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
             builder.Services.AddDbContext<ClothingStoreContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -57,6 +61,7 @@ namespace ClothingStore
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                app.MapGet("/", () => Results.Redirect("/swagger")); 
             }
 
             app.UseHttpsRedirection();
