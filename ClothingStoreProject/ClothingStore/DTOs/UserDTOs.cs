@@ -140,9 +140,17 @@ namespace ClothingStore.DTOs
         }
 
 
+        public class LoginResponseDto
+        {
+            public string Token { get; set; }
+            public string Username { get; set; }
+            public Role Role { get; set; }
+        }
 
-
-
+        public class SetRoleToAdmin
+        {
+            public Role Role { get; set; }
+        }
 
 
 

@@ -1,6 +1,5 @@
 using MailKit.Net.Smtp;
 using MimeKit;
-using System.Threading.RateLimiting;
 
 public interface IEmailService
 {
@@ -10,39 +9,64 @@ public interface IEmailService
 public class EmailService : IEmailService
 {
     private readonly IConfiguration _config;
-    private readonly RateLimiter _rateLimiter;
+    private readonly ILogger<EmailService> _logger;
 
-    public EmailService(IConfiguration config, RateLimiter rateLimiter)
+    public EmailService(
+        IConfiguration config,
+        ILogger<EmailService> logger)
     {
         _config = config;
-        _rateLimiter = rateLimiter;
+        _logger = logger;
     }
 
-    public async Task SendAsync(string toEmail, string subject, string body)
+    public async Task SendAsync(
+        string toEmail,
+        string subject,
+        string body)
     {
-        using var lease = await _rateLimiter.AcquireAsync(1);
-        if (!lease.IsAcquired)
-            return;
-
         try
         {
+            string? from = _config["Email:From"];
+            string? host = _config["Email:Host"];
+            string? username = _config["Email:Username"];
+            string? password = _config["Email:Password"];
+
+            if (string.IsNullOrWhiteSpace(from) ||
+                string.IsNullOrWhiteSpace(host) ||
+                string.IsNullOrWhiteSpace(username) ||
+                string.IsNullOrWhiteSpace(password) ||
+                !int.TryParse(_config["Email:Port"], out int port))
+            {
+                throw new InvalidOperationException(
+                    "The email configuration is incomplete.");
+            }
+
             var message = new MimeMessage();
-            message.From.Add(MailboxAddress.Parse(_config["Email:From"]));
+
+            message.From.Add(MailboxAddress.Parse(from));
             message.To.Add(MailboxAddress.Parse(toEmail));
             message.Subject = subject;
-            message.Body = new TextPart("html") { Text = body };
 
-            if (!int.TryParse(_config["Email:Port"], out int port))
-                return;
+            message.Body = new TextPart("html")
+            {
+                Text = body
+            };
 
             using var smtp = new SmtpClient();
-            await smtp.ConnectAsync(_config["Email:Host"], port, true);
-            await smtp.AuthenticateAsync(_config["Email:Username"], _config["Email:Password"]);
+
+            await smtp.ConnectAsync(host, port, true);
+            await smtp.AuthenticateAsync(username, password);
             await smtp.SendAsync(message);
             await smtp.DisconnectAsync(true);
         }
-        catch (Exception)
+        catch (Exception exception)
         {
-        }
+            _logger.LogError(
+                exception,
+                "Failed to send email to {EmailAddress}.",
+                toEmail);
+
+            throw;
+        }
     }
 }
