@@ -138,7 +138,16 @@ namespace ClothingStore.Controllers
         [Authorize(Roles = "Customer")]
         public IActionResult ChangeUserPassword([FromQuery] int id, [FromBody] ChangePasswordDto dto)
         {
-            bool changed = userService.ChangeUserPassword(id, dto);
+            int? userId = GetCurrentUserId();
+            if (userId == null)
+            {
+                return Unauthorized(
+                    "The token does not contain a valid userId.");
+            }
+            bool changed =
+                userService.ChangeUserPassword(
+                    userId.Value,
+                    dto);
 
             if (!changed)
             {
@@ -155,8 +164,7 @@ namespace ClothingStore.Controllers
 
         // PATCH: user/SetUserActiveStatus?id=1
         [HttpPatch("SetUserActiveStatus")]
-        //[Authorize(Roles = "Admin")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         public IActionResult SetUserActiveStatus([FromQuery] int id, [FromBody] SetActiveStatusDto dto)
         {
             bool updated = userService.SetUserActiveStatus(id, dto);
@@ -170,8 +178,7 @@ namespace ClothingStore.Controllers
         }
 
         [HttpPatch("SetUserRoleToAdmin")]
-        //[Authorize(Roles = "Admin")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         public IActionResult SetUserRole([FromQuery] int id, [FromBody] SetRoleToAdmin dto)
         {
             bool updated = userService.SetUserRole(id, dto);
@@ -183,6 +190,22 @@ namespace ClothingStore.Controllers
 
             return Ok("User status updated successfully.");
         }
+
+        private int? GetCurrentUserId()
+        {
+            string? userIdValue =
+                User.FindFirst("userId")?.Value;
+
+            if (!int.TryParse(
+                    userIdValue,
+                    out int userId))
+            {
+                return null;
+            }
+
+            return userId;
+        }
+
     }
 }
 

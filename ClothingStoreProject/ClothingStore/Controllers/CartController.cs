@@ -3,70 +3,161 @@ using ClothingStore.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using System.Security.Claims;
+
 namespace ClothingStore.Controllers
 {
     [Authorize(Roles = "Customer")]
-    [EnableRateLimiting("public")]
+    [EnableRateLimiting("private")]
     [Route("cart")]
     [ApiController]
     public class CartController : ControllerBase
     {
-        private CartService service;
+        private readonly CartService _service;
 
-        public CartController(CartService _service)
+        public CartController(CartService service)
         {
-            service = _service;
+            _service = service;
         }
 
-
-        [HttpGet("{userId}")]
-        public IActionResult GetCart([FromRoute] int userId)
+        // GET: cart
+        [HttpGet]
+        public IActionResult GetCart()
         {
-            var cart = service.GetByUserId(userId);
+            int? userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized(
+                    "The token does not contain a valid userId.");
+            }
+
+            var cart = _service.GetByUserId(userId.Value);
+
             if (cart == null)
-                return NotFound("No cart found for this user.");
+            {
+                return NotFound("No cart was found for this user.");
+            }
 
             return Ok(cart);
         }
 
+        // POST: cart/AddItem
         [HttpPost("AddItem")]
-        public IActionResult AddItem([FromQuery] int userId, [FromBody] AddCartItemDto dto)
+        public IActionResult AddItem(
+            [FromBody] AddCartItemDto dto)
         {
-            var cart = service.AddItem(userId, dto);
+            int? userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized(
+                    "The token does not contain a valid userId.");
+            }
+
+            var cart = _service.AddItem(userId.Value, dto);
+
             if (cart == null)
-                return BadRequest("Variant does not exist or requested quantity exceeds available stock.");
+            {
+                return BadRequest(
+                    "The variant does not exist, or the requested " +
+                    "quantity exceeds the available stock.");
+            }
 
             return Ok(cart);
         }
 
+        // PUT: cart/UpdateItem/5
         [HttpPut("UpdateItem/{cartItemId}")]
-        public IActionResult UpdateItem([FromQuery] int userId, [FromRoute] int cartItemId, [FromBody] UpdateCartItemDto dto)
+        public IActionResult UpdateItem(
+            [FromRoute] int cartItemId,
+            [FromBody] UpdateCartItemDto dto)
         {
-            var cart = service.UpdateItemQuantity(userId, cartItemId, dto);
+            int? userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized(
+                    "The token does not contain a valid userId.");
+            }
+
+            var cart = _service.UpdateItemQuantity(
+                userId.Value,
+                cartItemId,
+                dto);
+
             if (cart == null)
-                return BadRequest("Cart item not found, not owned by this user, or requested quantity exceeds available stock.");
+            {
+                return BadRequest(
+                    "The cart item was not found, does not belong " +
+                    "to this user, or the requested quantity " +
+                    "exceeds the available stock.");
+            }
 
             return Ok(cart);
         }
 
+        // DELETE: cart/RemoveItem/5
         [HttpDelete("RemoveItem/{cartItemId}")]
-        public IActionResult RemoveItem([FromQuery] int userId, [FromRoute] int cartItemId)
+        public IActionResult RemoveItem(
+            [FromRoute] int cartItemId)
         {
-            var removed = service.RemoveItem(userId, cartItemId);
+            int? userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized(
+                    "The token does not contain a valid userId.");
+            }
+
+            bool removed = _service.RemoveItem(
+                userId.Value,
+                cartItemId);
+
             if (!removed)
-                return NotFound("Cart item not found or not owned by this user.");
+            {
+                return NotFound(
+                    "The cart item was not found or does not " +
+                    "belong to this user.");
+            }
 
             return NoContent();
         }
 
+        // DELETE: cart/Clear
         [HttpDelete("Clear")]
-        public IActionResult ClearCart([FromQuery] int userId)
+        public IActionResult ClearCart()
         {
-            var cleared = service.ClearCart(userId);
+            int? userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized(
+                    "The token does not contain a valid userId.");
+            }
+
+            bool cleared = _service.ClearCart(userId.Value);
+
             if (!cleared)
-                return NotFound("Cart not found for this user.");
+            {
+                return NotFound(
+                    "No cart was found for this user.");
+            }
 
             return NoContent();
+        }
+
+        private int? GetCurrentUserId()
+        {
+            string? userIdClaim =
+                User.FindFirstValue("userId");
+
+            if (!int.TryParse(userIdClaim, out int userId))
+            {
+                return null;
+            }
+
+            return userId;
         }
     }
 }

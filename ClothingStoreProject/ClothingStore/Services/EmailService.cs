@@ -1,9 +1,13 @@
 using MailKit.Net.Smtp;
+using MailKit.Security;
 using MimeKit;
 
 public interface IEmailService
 {
-    Task SendAsync(string toEmail, string subject, string body);
+    Task SendAsync(
+        string toEmail,
+        string subject,
+        string body);
 }
 
 public class EmailService : IEmailService
@@ -31,20 +35,46 @@ public class EmailService : IEmailService
             string? username = _config["Email:Username"];
             string? password = _config["Email:Password"];
 
-            if (string.IsNullOrWhiteSpace(from) ||
-                string.IsNullOrWhiteSpace(host) ||
-                string.IsNullOrWhiteSpace(username) ||
-                string.IsNullOrWhiteSpace(password) ||
-                !int.TryParse(_config["Email:Port"], out int port))
+            if (string.IsNullOrWhiteSpace(from))
             {
                 throw new InvalidOperationException(
-                    "The email configuration is incomplete.");
+                    "Email:From is missing.");
+            }
+
+            if (string.IsNullOrWhiteSpace(host))
+            {
+                throw new InvalidOperationException(
+                    "Email:Host is missing.");
+            }
+
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                throw new InvalidOperationException(
+                    "Email:Username is missing.");
+            }
+
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                throw new InvalidOperationException(
+                    "Email:Password is missing.");
+            }
+
+            if (!int.TryParse(
+                    _config["Email:Port"],
+                    out int port))
+            {
+                throw new InvalidOperationException(
+                    "Email:Port is missing or invalid.");
             }
 
             var message = new MimeMessage();
 
-            message.From.Add(MailboxAddress.Parse(from));
-            message.To.Add(MailboxAddress.Parse(toEmail));
+            message.From.Add(
+                MailboxAddress.Parse(from));
+
+            message.To.Add(
+                MailboxAddress.Parse(toEmail));
+
             message.Subject = subject;
 
             message.Body = new TextPart("html")
@@ -54,9 +84,18 @@ public class EmailService : IEmailService
 
             using var smtp = new SmtpClient();
 
-            await smtp.ConnectAsync(host, port, true);
-            await smtp.AuthenticateAsync(username, password);
+            // Port 587 uses STARTTLS
+            await smtp.ConnectAsync(
+                host,
+                port,
+                SecureSocketOptions.StartTls);
+
+            await smtp.AuthenticateAsync(
+                username,
+                password);
+
             await smtp.SendAsync(message);
+
             await smtp.DisconnectAsync(true);
         }
         catch (Exception exception)
