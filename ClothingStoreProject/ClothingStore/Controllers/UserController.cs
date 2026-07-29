@@ -87,7 +87,7 @@ namespace ClothingStore.Controllers
                 return BadRequest("Email or Username already exists.");
 
             }
-            return Ok(user);
+            return Created();
 
         }
 

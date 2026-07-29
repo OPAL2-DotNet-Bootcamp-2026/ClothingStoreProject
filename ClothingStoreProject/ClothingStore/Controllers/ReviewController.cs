@@ -1,10 +1,12 @@
 ﻿using ClothingStore.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using static ClothingStore.DTOs.ReviewDTOs;
 
 namespace ClothingStore.Controllers
 {
+    [Authorize]
     [EnableRateLimiting("public")]
     [ApiController]
     [Route("review")]
@@ -30,7 +32,7 @@ namespace ClothingStore.Controllers
 
 
 
-
+        [Authorize(Roles = "Admin")]
         // GET: review/GetReviewById?id=1
         [HttpGet("GetReviewById")]
         public IActionResult GetReviewById([FromQuery] int id)
@@ -84,7 +86,7 @@ namespace ClothingStore.Controllers
         }
 
 
-
+        [Authorize(Roles = "Customer")]
         // POST: review/AddReview
         [HttpPost("AddReview")]
         public IActionResult AddReview([FromQuery] int userId, [FromBody] CreateReviewDto dto)
@@ -102,10 +104,10 @@ namespace ClothingStore.Controllers
 
 
 
-
+        [Authorize(Roles = "Customer")]
         // PUT: review/UpdateReview?id=1
         [HttpPut("UpdateReview")]
-        public IActionResult UpdateReview([FromQuery] int id,[FromBody] UpdateReviewDto dto)
+        public IActionResult UpdateReview([FromQuery] int id, [FromBody] UpdateReviewDto dto)
         {
             bool updated = reviewService.UpdateReview(id, dto);
 
@@ -141,5 +143,5 @@ namespace ClothingStore.Controllers
 
     }
 
-        }
+}
 

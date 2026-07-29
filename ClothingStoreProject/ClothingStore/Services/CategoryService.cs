@@ -177,19 +177,19 @@ namespace ClothingStore.Services
             return true;
         }
 
-        public List<ProductListItemDto>? GetProductsByCategoryId(int categoryId)
-        {
-            Category? category = categoryRepo.GetById(categoryId);
+        //public List<ProductListItemDto>? GetProductsByCategoryId(int categoryId)
+        //{
+        //    Category? category = categoryRepo.GetById(categoryId);
 
-            if (category == null)
-            {
-                return null;
-            }
+        //    if (category == null)
+        //    {
+        //        return null;
+        //    }
 
-            return productRepo.GetByCategory(categoryId)
-                .Select(MapToProductListItemDto)
-                .ToList();
-        }
+        //    return productRepo.GetByCategory(categoryId)
+        //        .Select(MapToProductListItemDto)
+        //        .ToList();
+        //}
 
         private bool WouldCreateCycle(int categoryId, int newParentId)
         {
@@ -228,18 +228,18 @@ namespace ClothingStore.Services
             };
         }
 
-        private ProductListItemDto MapToProductListItemDto(Product product)
-        {
-            return new ProductListItemDto
-            {
-                productId = product.productId,
-                productName = product.productName,
-                basePrice = product.basePrice,
-                BrandName = product.Brand.brandName,
-                CategoryName = product.Category.categoryName,
-                gender = product.gender,
-                isAvailable = product.isAvailable
-            };
-        }
+        //private ProductListItemDto MapToProductListItemDto(Product product)
+        //{
+        //    return new ProductListItemDto
+        //    {
+        //        productId = product.productId,
+        //        productName = product.productName,
+        //        basePrice = product.basePrice,
+        //        BrandName = product.Brand.brandName,
+        //        CategoryName = product.Category.categoryName,
+        //        gender = product.gender,
+        //        isAvailable = product.isAvailable
+        //    };
+        //}
     }
 }

@@ -1,9 +1,11 @@
 ﻿using ClothingStore.DTOs;
 using ClothingStore.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 namespace ClothingStore.Controllers
 {
+    [Authorize]
     [EnableRateLimiting("public")]
     [ApiController]
     [Route("variant")]
@@ -17,6 +19,7 @@ namespace ClothingStore.Controllers
             this.productVariantService = productVariantService;
         }
 
+        [AllowAnonymous]
         [HttpGet("GetAllVariants")]
         public IActionResult GetAllVariants()
         {
@@ -25,6 +28,7 @@ namespace ClothingStore.Controllers
             return Ok(variants);
         }
 
+        [AllowAnonymous]
         [HttpGet("GetVariantById")]
         public IActionResult GetVariantById([FromQuery] int id)
         {
@@ -44,6 +48,7 @@ namespace ClothingStore.Controllers
             return Ok(variant);
         }
 
+        [AllowAnonymous]
         [HttpGet("GetVariantsByProduct")]
         public IActionResult GetVariantsByProduct([FromQuery] int productId)
         {
@@ -57,6 +62,7 @@ namespace ClothingStore.Controllers
             return Ok(variants);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetVariantBySku")]
         public IActionResult GetVariantBySku([FromQuery] string sku)
         {
@@ -75,6 +81,7 @@ namespace ClothingStore.Controllers
             return Ok(variant);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("AddVariant")]
         public IActionResult AddVariant([FromBody] ProductVariantDTOs dto)
         {
@@ -93,6 +100,7 @@ namespace ClothingStore.Controllers
                 variant);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("UpdateVariant")]
         public IActionResult UpdateVariant([FromQuery] int id,[FromBody] UpdateVariantDto dto)
         {
@@ -111,6 +119,7 @@ namespace ClothingStore.Controllers
             return Ok(variant);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPatch("AdjustStock")]
         public IActionResult AdjustStock([FromQuery] int id,[FromBody] AdjustStockDto dto)
         {
@@ -137,6 +146,7 @@ namespace ClothingStore.Controllers
             return Ok(updatedVariant);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("DeleteVariant")]
         public IActionResult DeleteVariant([FromQuery] int id)
         {

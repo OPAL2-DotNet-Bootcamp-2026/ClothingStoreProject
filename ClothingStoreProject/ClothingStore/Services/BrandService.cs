@@ -112,19 +112,19 @@ namespace ClothingStore.Services
             return true;
         }
 
-        public List<ProductListItemDto>? GetProductsByBrandId(int brandId)
-        {
-            Brand? brand = brandRepo.GetById(brandId);
+        //public List<ProductListItemDto>? GetProductsByBrandId(int brandId)
+        //{
+        //    Brand? brand = brandRepo.GetById(brandId);
 
-            if (brand == null)
-            {
-                return null;
-            }
+        //    if (brand == null)
+        //    {
+        //        return null;
+        //    }
 
-            return productRepo.GetByBrand(brandId)
-                .Select(MapToProductListItemDto)
-                .ToList();
-        }
+        //    return productRepo.GetByBrand(brandId)
+        //        .Select(MapToProductListItemDto)
+        //        .ToList();
+        //}
 
         private BrandResponseDto MapToDto(Brand brand)
         {
@@ -139,18 +139,18 @@ namespace ClothingStore.Services
             };
         }
 
-        private ProductListItemDto MapToProductListItemDto(Product product)
-        {
-            return new ProductListItemDto
-            {
-                productId = product.productId,
-                productName = product.productName,
-                basePrice = product.basePrice,
-                BrandName = product.Brand.brandName,
-                CategoryName = product.Category.categoryName,
-                gender = product.gender,
-                isAvailable = product.isAvailable
-            };
-        }
+        //private ProductListItemDto MapToProductListItemDto(Product product)
+        //{
+        //    return new ProductListItemDto
+        //    {
+        //        productId = product.productId,
+        //        productName = product.productName,
+        //        basePrice = product.basePrice,
+        //        BrandName = product.Brand.brandName,
+        //        CategoryName = product.Category.categoryName,
+        //        gender = product.gender,
+        //        isAvailable = product.isAvailable
+        //    };
+        //}
     }
 }
