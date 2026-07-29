@@ -1,9 +1,11 @@
 ﻿using ClothingStore.DTOs;
 using ClothingStore.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 namespace ClothingStore.Controllers
 {
+    [Authorize]
     [EnableRateLimiting("public")]
     [Route("brand")]
     [ApiController]
@@ -15,7 +17,7 @@ namespace ClothingStore.Controllers
         {
             service = _service;
         }
-
+        [AllowAnonymous]
         [HttpGet("GetAllBrands")]
         public IActionResult GetAllBrands()
         {
@@ -27,7 +29,7 @@ namespace ClothingStore.Controllers
             return Ok(brands);
         }
 
-
+        [AllowAnonymous]
         [HttpGet("GetBrandById")]
         public IActionResult GetBrandById([FromQuery] int id)
         {
@@ -39,7 +41,7 @@ namespace ClothingStore.Controllers
             return Ok(brand);
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost("AddBrand")]
         public IActionResult AddBrand([FromBody] CreateBrandDto dto)
         {
@@ -51,6 +53,7 @@ namespace ClothingStore.Controllers
             return CreatedAtAction(nameof(GetBrandById), new { id = brand.brandId }, brand);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("UpdateBrand")]
         public IActionResult UpdateBrand([FromQuery] int id, [FromBody] UpdateBrandDto dto)
         {
@@ -67,6 +70,7 @@ namespace ClothingStore.Controllers
             return Ok(brand);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPatch("DeactivateBrand")]
         public IActionResult DeactivateBrand([FromQuery] int id)
         {
@@ -78,15 +82,15 @@ namespace ClothingStore.Controllers
             return NoContent();
         }
 
-        [HttpGet("GetProductsByBrandId")]
-        public IActionResult GetProductsByBrandId([FromQuery] int brandId)
-        {
-            var products = service.GetProductsByBrandId(brandId);
+        //[HttpGet("GetProductsByBrandId")]
+        //public IActionResult GetProductsByBrandId([FromQuery] int brandId)
+        //{
+        //    var products = service.GetProductsByBrandId(brandId);
 
-            if (products == null)
-                return NotFound("Brand not found.");
+        //    if (products == null)
+        //        return NotFound("Brand not found.");
 
-            return Ok(products);
-        }
+        //    return Ok(products);
+        //}
     }
 }

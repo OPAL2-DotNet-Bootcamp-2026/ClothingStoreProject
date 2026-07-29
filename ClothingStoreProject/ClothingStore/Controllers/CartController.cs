@@ -1,9 +1,11 @@
 ﻿using ClothingStore.DTOs;
 using ClothingStore.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 namespace ClothingStore.Controllers
 {
+    [Authorize(Roles = "Customer")]
     [EnableRateLimiting("public")]
     [Route("cart")]
     [ApiController]
@@ -16,9 +18,6 @@ namespace ClothingStore.Controllers
             service = _service;
         }
 
-        // TODO: replace [FromQuery] int userId with User.FindFirst("userId") once
-        // JWT auth middleware is wired into Program.cs. Left as a query param for now
-        // so the endpoint is testable in Swagger before auth exists.
 
         [HttpGet("{userId}")]
         public IActionResult GetCart([FromRoute] int userId)

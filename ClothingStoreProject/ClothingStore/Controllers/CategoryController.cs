@@ -1,9 +1,11 @@
 ﻿using ClothingStore.DTOs;
 using ClothingStore.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 namespace ClothingStore.Controllers
 {
+    [Authorize]
     [EnableRateLimiting("public")]
     [Route("category")]
     [ApiController]
@@ -16,6 +18,7 @@ namespace ClothingStore.Controllers
             service = _service;
         }
 
+        [AllowAnonymous]
         [HttpGet("GetAllCategories")]
         public IActionResult GetAllCategories()
         {
@@ -23,6 +26,7 @@ namespace ClothingStore.Controllers
             return Ok(categories);
         }
 
+        [AllowAnonymous]
         [HttpGet("GetCategoryById")]
         public IActionResult GetCategoryById([FromQuery] int id)
         {
@@ -34,6 +38,7 @@ namespace ClothingStore.Controllers
             return Ok(category);
         }
 
+        [AllowAnonymous]
         [HttpGet("GetTopLevelCategories")]
         public IActionResult GetTopLevelCategories()
         {
@@ -41,6 +46,7 @@ namespace ClothingStore.Controllers
             return Ok(categories);
         }
 
+        [AllowAnonymous]
         [HttpGet("GetSubcategories")]
         public IActionResult GetSubcategories([FromQuery] int parentId)
         {
@@ -52,7 +58,7 @@ namespace ClothingStore.Controllers
             return Ok(categories);
         }
 
-       
+        [Authorize(Roles = "Admin")]
         [HttpPost("AddCategory")]
         public IActionResult AddCategory([FromBody] CreateCategoryDto dto)
         {
@@ -64,7 +70,7 @@ namespace ClothingStore.Controllers
             return CreatedAtAction(nameof(GetCategoryById), new { id = category.categoryId }, category);
         }
 
-       
+        [Authorize(Roles = "Admin")]
         [HttpPut("UpdateCategory")]
         public IActionResult UpdateCategory([FromQuery] int id, [FromBody] UpdateCategoryDto dto)
         {
@@ -76,7 +82,7 @@ namespace ClothingStore.Controllers
             return Ok(category);
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpDelete("DeactivateCategory")]
         public IActionResult DeactivateCategory([FromQuery] int id)
         {
@@ -91,15 +97,16 @@ namespace ClothingStore.Controllers
             return NoContent();
         }
 
-        [HttpGet("GetProductsByCategoryId")]
-        public IActionResult GetProductsByCategoryId([FromQuery] int categoryId)
-        {
-            var products = service.GetProductsByCategoryId(categoryId);
+        
+        //[HttpGet("GetProductsByCategoryId")]
+        //public IActionResult GetProductsByCategoryId([FromQuery] int categoryId)
+        //{
+        //    var products = service.GetProductsByCategoryId(categoryId);
 
-            if (products == null)
-                return NotFound("Category not found.");
+        //    if (products == null)
+        //        return NotFound("Category not found.");
 
-            return Ok(products);
-        }
+        //    return Ok(products);
+        //}
     }
 }

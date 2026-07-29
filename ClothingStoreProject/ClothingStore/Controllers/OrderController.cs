@@ -1,11 +1,13 @@
 ﻿using ClothingStore.Repos;
 using ClothingStore.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using static ClothingStore.DTOs.OrderDTOs;
 
 namespace ClothingStore.Controllers
 {
+    [Authorize]
     [EnableRateLimiting("public")]
     [Route("order")]
     [ApiController]
@@ -25,7 +27,9 @@ namespace ClothingStore.Controllers
             _userRepo = userRepo;
         }
 
+
         // GET: order
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -35,6 +39,7 @@ namespace ClothingStore.Controllers
         }
 
         // GET: order/user/1
+        [Authorize(Roles = "Admin")]
         [HttpGet("user/{userId}")]
         public IActionResult GetByUser([FromRoute] int userId)
         {
@@ -44,6 +49,7 @@ namespace ClothingStore.Controllers
         }
 
         // GET: order/1
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public IActionResult GetById([FromRoute] int id)
         {
@@ -58,6 +64,7 @@ namespace ClothingStore.Controllers
         }
 
         // POST: order/Checkout?userId=1
+        [Authorize(Roles = "Customer")]
         [HttpPost("Checkout")]
         [EnableRateLimiting("private")]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -103,6 +110,7 @@ namespace ClothingStore.Controllers
         }
 
         // PATCH: order/UpdateStatus/1
+        [Authorize(Roles = "Admin")]
         [HttpPatch("UpdateStatus/{id}")]
         [EnableRateLimiting("private")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

@@ -3,8 +3,10 @@ using ClothingStore.Services;
 using Microsoft.AspNetCore.Mvc;
 using static ClothingStore.Enums;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.Authorization;
 namespace ClothingStore.Controllers
 {
+    [Authorize]
     [EnableRateLimiting("public")]
     [ApiController]
     [Route("product")]
@@ -17,6 +19,7 @@ namespace ClothingStore.Controllers
             this.productService = productService;
         }
 
+        [AllowAnonymous]
         [HttpGet("GetAllProducts")]
         public IActionResult GetAllProducts()
         {
@@ -25,6 +28,7 @@ namespace ClothingStore.Controllers
             return Ok(products);
         }
 
+        [AllowAnonymous]
         [HttpGet("GetProductById")]
         public IActionResult GetProductById([FromQuery] int id)
         {
@@ -43,6 +47,7 @@ namespace ClothingStore.Controllers
             return Ok(product);
         }
 
+        [AllowAnonymous]
         [HttpGet("GetProductsByBrand")]
         public IActionResult GetProductsByBrand([FromQuery] int brandId)
         {
@@ -56,6 +61,7 @@ namespace ClothingStore.Controllers
             return Ok(products);
         }
 
+        [AllowAnonymous]
         [HttpGet("GetProductsByCategory")]
         public IActionResult GetProductsByCategory([FromQuery] int categoryId)
         {
@@ -69,6 +75,7 @@ namespace ClothingStore.Controllers
             return Ok(products);
         }
 
+        [AllowAnonymous]
         [HttpGet("GetProductsByGender")]
         public IActionResult GetProductsByGender([FromQuery] Gender gender)
         {
@@ -77,6 +84,7 @@ namespace ClothingStore.Controllers
             return Ok(products);
         }
 
+        [AllowAnonymous]
         [HttpGet("SearchProductsByName")]
         public IActionResult SearchProductsByName([FromQuery] string name)
         {
@@ -89,7 +97,7 @@ namespace ClothingStore.Controllers
 
             return Ok(products);
         }
-
+        [AllowAnonymous]
         [HttpGet("GetAvailableProducts")]
         public IActionResult GetAvailableProducts()
         {
@@ -98,6 +106,7 @@ namespace ClothingStore.Controllers
             return Ok(products);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("AddProduct")]
         public IActionResult AddProduct([FromBody] CreateProductDto dto)
         {
@@ -117,6 +126,7 @@ namespace ClothingStore.Controllers
                 product);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("UpdateProduct")]
         public IActionResult UpdateProduct([FromQuery] int id,[FromBody] UpdateProductDto dto)
         {
@@ -145,6 +155,7 @@ namespace ClothingStore.Controllers
             return Ok(updatedProduct);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("DeactivateProduct")]
         public IActionResult DeactivateProduct([FromQuery] int id)
         {
@@ -163,6 +174,7 @@ namespace ClothingStore.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPatch("ToggleAvailability")]
         public IActionResult ToggleAvailability([FromQuery] int id)
         {
