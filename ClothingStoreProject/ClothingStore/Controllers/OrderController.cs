@@ -8,7 +8,7 @@ using static ClothingStore.DTOs.OrderDTOs;
 namespace ClothingStore.Controllers
 {
     [Authorize]
-    [EnableRateLimiting("public")]
+    [EnableRateLimiting("private")]
     [Route("order")]
     [ApiController]
     public class OrderController : ControllerBase
@@ -27,8 +27,7 @@ namespace ClothingStore.Controllers
             _userRepo = userRepo;
         }
 
-
-        // GET: order
+        // Admin: GET /order
         [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult GetAll()
@@ -38,43 +37,118 @@ namespace ClothingStore.Controllers
             return Ok(orders);
         }
 
-        // GET: order/user/1
+        // Admin: GET /order/user/1
         [Authorize(Roles = "Admin")]
         [HttpGet("user/{userId}")]
-        public IActionResult GetByUser([FromRoute] int userId)
+        public IActionResult GetByUser(
+            [FromRoute] int userId)
         {
+            if (userId <= 0)
+            {
+                return BadRequest(
+                    "User Id must be greater than zero.");
+            }
+
             var orders = _service.GetByUserId(userId);
 
             return Ok(orders);
         }
 
-        // GET: order/1
+        // Admin: GET /order/1
         [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
-        public IActionResult GetById([FromRoute] int id)
+        public IActionResult GetById(
+            [FromRoute] int id)
         {
+            if (id <= 0)
+            {
+                return BadRequest(
+                    "Order Id must be greater than zero.");
+            }
+
             var order = _service.GetById(id);
 
             if (order == null)
             {
-                return NotFound($"Order with id {id} was not found.");
+                return NotFound(
+                    $"Order with id {id} was not found.");
             }
 
             return Ok(order);
         }
 
-        // POST: order/Checkout?userId=1
+        // Customer: GET /order/mine
+        [Authorize(Roles = "Customer")]
+        [HttpGet("mine")]
+        public IActionResult GetMyOrders()
+        {
+            int? userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized(
+                    "The token does not contain a valid userId.");
+            }
+
+            var orders = _service.GetByUserId(userId.Value);
+
+            return Ok(orders);
+        }
+
+        // Customer: GET /order/mine/1
+        [Authorize(Roles = "Customer")]
+        [HttpGet("mine/{id}")]
+        public IActionResult GetMyOrderById(
+            [FromRoute] int id)
+        {
+            int? userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized(
+                    "The token does not contain a valid userId.");
+            }
+
+            if (id <= 0)
+            {
+                return BadRequest(
+                    "Order Id must be greater than zero.");
+            }
+
+            var order = _service.GetById(id);
+
+            // Return NotFound when the order does not exist
+            // or does not belong to the logged-in customer.
+            if (order == null || order.UserId != userId.Value)
+            {
+                return NotFound(
+                    $"Order with id {id} was not found.");
+            }
+
+            return Ok(order);
+        }
+
+        // Customer: POST /order/Checkout
         [Authorize(Roles = "Customer")]
         [HttpPost("Checkout")]
-        [EnableRateLimiting("private")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         public async Task<IActionResult> Checkout(
-            [FromQuery] int userId,
             [FromBody] CreateOrderDto dto)
         {
-            var order = _service.Checkout(userId, dto);
+            int? userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized(
+                    "The token does not contain a valid userId.");
+            }
+
+            var order = _service.Checkout(
+                userId.Value,
+                dto);
 
             if (order == null)
             {
@@ -83,36 +157,47 @@ namespace ClothingStore.Controllers
                     "no longer have enough stock.");
             }
 
-            var user = _userRepo.GetUserById(userId);
+            var user = _userRepo.GetUserById(userId.Value);
 
             if (user != null)
             {
                 await _emailService.SendAsync(
                     user.email,
-                    "Order Confirmed",
+                    $"Order #{order.OrderId} Confirmed",
                     $"""
                     <h1>Thank you, {user.fullName}!</h1>
 
                     <p>
-                        Your order #{order.OrderId} has been placed successfully.
+                        Your order
+                        <strong>#{order.OrderId}</strong>
+                        has been placed successfully.
                     </p>
 
                     <p>
-                        Total: {order.TotalAmount:C}
+                        <strong>Total:</strong>
+                        OMR {order.TotalAmount:N3}
+                    </p>
+
+                    <p>
+                        We will notify you when the order status changes.
+                    </p>
+
+                    <p>
+                        Kind regards,<br>
+                        <strong>ClothingStore Team</strong>
                     </p>
                     """);
             }
 
             return CreatedAtAction(
-                nameof(GetById),
+                nameof(GetMyOrderById),
                 new { id = order.OrderId },
                 order);
         }
 
-        // PATCH: order/UpdateStatus/1
+        // Admin: PATCH /order/UpdateStatus/1
         [Authorize(Roles = "Admin")]
         [HttpPatch("UpdateStatus/{id}")]
-        [EnableRateLimiting("private")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
@@ -120,11 +205,18 @@ namespace ClothingStore.Controllers
             [FromRoute] int id,
             [FromBody] UpdateOrderStatusDto dto)
         {
+            if (id <= 0)
+            {
+                return BadRequest(
+                    "Order Id must be greater than zero.");
+            }
+
             var order = _service.UpdateStatus(id, dto);
 
             if (order == null)
             {
-                return NotFound($"Order with id {id} was not found.");
+                return NotFound(
+                    $"Order with id {id} was not found.");
             }
 
             var user = _userRepo.GetUserById(order.UserId);
@@ -133,18 +225,46 @@ namespace ClothingStore.Controllers
             {
                 await _emailService.SendAsync(
                     user.email,
-                    "Order Status Updated",
+                    $"Order #{id} Status Updated",
                     $"""
-                    <h1>Hi {user.fullName},</h1>
+                    <h1>Hello {user.fullName},</h1>
 
                     <p>
-                        Your order #{id} status has been updated to
-                        <strong>{dto.Status}</strong>.
+                        The status of your order
+                        <strong>#{id}</strong>
+                        has been updated.
+                    </p>
+
+                    <p>
+                        <strong>New status:</strong>
+                        {dto.Status}
+                    </p>
+
+                    <p>
+                        Thank you for shopping with ClothingStore.
+                    </p>
+
+                    <p>
+                        Kind regards,<br>
+                        <strong>ClothingStore Team</strong>
                     </p>
                     """);
             }
 
             return NoContent();
+        }
+
+        private int? GetCurrentUserId()
+        {
+            string? userIdValue =
+                User.FindFirst("userId")?.Value;
+
+            if (!int.TryParse(userIdValue, out int userId))
+            {
+                return null;
+            }
+
+            return userId;
         }
     }
 }
